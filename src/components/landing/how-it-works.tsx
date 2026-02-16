@@ -44,7 +44,7 @@ export function HowItWorks() {
         <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {steps.map((step) => (
             <div key={step.number} className="group relative">
-              <div className="flex h-12 w-12 items-center justify-center rounded-[var(--radius-lg)] bg-coral-light text-coral transition-colors group-hover:bg-coral group-hover:text-white dark:bg-coral-900/30 dark:group-hover:bg-coral">
+              <div className="flex h-12 w-12 items-center justify-center rounded-[var(--radius-lg)] bg-coral-light text-coral transition-all group-hover:bg-coral group-hover:text-white group-hover:shadow-lg group-hover:shadow-coral/20 dark:bg-coral-900/30 dark:group-hover:bg-coral">
                 <step.icon className="h-5 w-5" />
               </div>
               <p className="mt-4 font-mono text-xs font-semibold text-text-muted">

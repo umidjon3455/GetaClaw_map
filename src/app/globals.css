@@ -1,11 +1,15 @@
 @import "tailwindcss";
 
+/* Enable class-based dark mode (responds to .dark on <html>) */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ============================================
    Get a Claw — Coral Claw Design System
    ============================================ */
 
+/* --- Static tokens: inlined for efficiency, never change between themes --- */
 @theme inline {
-  /* --- Colors --- */
+  /* Primary coral palette */
   --color-coral: #E8634A;
   --color-coral-hover: #D4553D;
   --color-coral-active: #C04A35;
@@ -21,70 +25,82 @@
   --color-coral-800: #923627;
   --color-coral-900: #793226;
 
+  /* Neutrals */
   --color-charcoal: #1A1A2E;
   --color-charcoal-light: #2A2A42;
-
   --color-warm-white: #FAF8F5;
   --color-sand: #E8E0D4;
   --color-sand-dark: #D4CBC0;
-
   --color-slate: #6B7280;
   --color-slate-light: #9CA3AF;
 
+  /* Status colors */
   --color-sea-green: #2D9F7F;
   --color-sea-green-light: #34B891;
   --color-sea-green-dark: #257A63;
-
   --color-amber: #E5A431;
   --color-amber-light: #F5C462;
-
   --color-soft-red: #D94452;
   --color-soft-red-light: #E8606D;
 
-  /* Dark mode surface colors */
+  /* Violet (reasoning tier, accents) */
+  --color-violet: #7C3AED;
+  --color-violet-light: #EDE9FE;
+  --color-violet-dark: #5B21B6;
+  --color-violet-50: #F5F3FF;
+  --color-violet-100: #EDE9FE;
+  --color-violet-400: #A78BFA;
+  --color-violet-700: #6D28D9;
+  --color-violet-900: #4C1D95;
+
+  /* Dark mode raw surface palette */
   --color-dark-bg: #0F0F1A;
   --color-dark-surface: #1A1A2E;
   --color-dark-elevated: #252540;
   --color-dark-border: #333355;
 
-  /* Semantic tokens */
-  --color-background: var(--color-warm-white);
-  --color-foreground: var(--color-charcoal);
-  --color-surface: #FFFFFF;
-  --color-surface-elevated: #FFFFFF;
-  --color-border: var(--color-sand);
-  --color-border-hover: var(--color-sand-dark);
-  --color-text-primary: var(--color-charcoal);
-  --color-text-secondary: var(--color-slate);
-  --color-text-muted: var(--color-slate-light);
-  --color-primary: var(--color-coral);
-  --color-primary-hover: var(--color-coral-hover);
-  --color-success: var(--color-sea-green);
-  --color-warning: var(--color-amber);
-  --color-error: var(--color-soft-red);
+  /* Permanent aliases */
+  --color-primary: #E8634A;
+  --color-primary-hover: #D4553D;
+  --color-success: #2D9F7F;
+  --color-warning: #E5A431;
+  --color-error: #D94452;
 
-  /* --- Typography --- */
+  /* Typography */
   --font-heading: "Space Grotesk", system-ui, sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
   --font-sans: var(--font-body);
 
-  /* --- Spacing --- */
+  /* Radius */
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 16px;
   --radius-xl: 24px;
 }
 
-/* --- Dark mode overrides --- */
+/* --- Semantic tokens: use var() references so .dark overrides take effect --- */
+@theme {
+  --color-background: #FAF8F5;
+  --color-foreground: #1A1A2E;
+  --color-surface: #FFFFFF;
+  --color-surface-elevated: #FFFFFF;
+  --color-border: #E8E0D4;
+  --color-border-hover: #D4CBC0;
+  --color-text-primary: #1A1A2E;
+  --color-text-secondary: #6B7280;
+  --color-text-muted: #9CA3AF;
+}
+
+/* --- Dark mode semantic overrides --- */
 .dark {
-  --color-background: var(--color-dark-bg);
-  --color-foreground: var(--color-sand);
-  --color-surface: var(--color-dark-surface);
-  --color-surface-elevated: var(--color-dark-elevated);
-  --color-border: var(--color-dark-border);
+  --color-background: #0F0F1A;
+  --color-foreground: #E8E0D4;
+  --color-surface: #1A1A2E;
+  --color-surface-elevated: #252540;
+  --color-border: #333355;
   --color-border-hover: #444466;
-  --color-text-primary: var(--color-sand);
+  --color-text-primary: #E8E0D4;
   --color-text-secondary: #9CA3AF;
   --color-text-muted: #6B7280;
 }
@@ -113,18 +129,19 @@ code, pre, kbd {
 
 /* --- Selection --- */
 ::selection {
-  background-color: var(--color-coral-200);
-  color: var(--color-charcoal);
+  background-color: #FCD5CC;
+  color: #1A1A2E;
 }
 
 .dark ::selection {
-  background-color: var(--color-coral-700);
-  color: var(--color-sand);
+  background-color: #793226;
+  color: #E8E0D4;
 }
 
 /* --- Focus ring utility --- */
 .focus-ring {
-  @apply outline-none ring-2 ring-coral/40 ring-offset-2 ring-offset-background;
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px rgba(232, 99, 74, 0.4);
 }
 
 /* --- Scrollbar styling --- */
@@ -138,10 +155,10 @@ code, pre, kbd {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-sand-dark);
+  background: #D4CBC0;
   border-radius: 3px;
 }
 
 .dark ::-webkit-scrollbar-thumb {
-  background: var(--color-dark-border);
+  background: #333355;
 }

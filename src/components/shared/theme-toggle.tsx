@@ -9,7 +9,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(resolved === "light" ? "dark" : "light")}
-      className="relative flex h-9 w-9 items-center justify-center rounded-[var(--radius-md)] text-text-secondary transition-colors hover:bg-sand/60 hover:text-text-primary dark:hover:bg-dark-elevated"
+      className="relative flex h-9 w-9 items-center justify-center rounded-[var(--radius-md)] text-text-secondary transition-colors hover:bg-surface hover:text-text-primary"
       aria-label={`Switch to ${resolved === "light" ? "dark" : "light"} mode`}
     >
       <Sun className="h-[18px] w-[18px] rotate-0 scale-100 transition-transform dark:-rotate-90 dark:scale-0" />

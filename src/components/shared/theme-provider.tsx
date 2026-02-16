@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { initializeTheme } from "@/lib/store/theme-store";
+import { initializeTheme, useThemeStore } from "@/lib/store/theme-store";
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -9,7 +9,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handler = () => {
-      const { theme, setTheme } = require("@/lib/store/theme-store").useThemeStore.getState();
+      const { theme, setTheme } = useThemeStore.getState();
       if (theme === "system") {
         setTheme("system");
       }

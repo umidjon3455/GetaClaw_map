@@ -40,7 +40,7 @@ export function WhySelfHost() {
           {reasons.map((reason) => (
             <div
               key={reason.title}
-              className="rounded-[var(--radius-lg)] border border-border bg-background p-6 dark:bg-dark-surface"
+              className="rounded-[var(--radius-lg)] border border-border bg-background p-6 transition-shadow hover:shadow-md dark:hover:shadow-none"
             >
               <div className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-md)] bg-coral-light text-coral dark:bg-coral-900/30">
                 <reason.icon className="h-5 w-5" />

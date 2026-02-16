@@ -67,7 +67,7 @@ const tierColors: Record<string, string> = {
   Premium: "bg-coral-100 text-coral-700 dark:bg-coral-900/30 dark:text-coral-400",
   "Fast & Cheap": "bg-sea-green/10 text-sea-green",
   "Open Source": "bg-amber/10 text-amber",
-  Reasoning: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",
+  Reasoning: "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400",
 };
 
 export function StepModels() {

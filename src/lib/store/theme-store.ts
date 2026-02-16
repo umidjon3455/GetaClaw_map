@@ -26,8 +26,8 @@ function applyTheme(resolved: "light" | "dark") {
 }
 
 export const useThemeStore = create<ThemeState>((set) => ({
-  theme: "light",
-  resolved: "light",
+  theme: "dark",
+  resolved: "dark",
   setTheme: (theme) => {
     const resolved = resolveTheme(theme);
     applyTheme(resolved);
@@ -43,7 +43,7 @@ export function initializeTheme() {
     typeof localStorage !== "undefined"
       ? (localStorage.getItem("getaclaw-theme") as Theme | null)
       : null;
-  const theme = stored || "light";
+  const theme = stored || "dark";
   const resolved = resolveTheme(theme);
   applyTheme(resolved);
   useThemeStore.setState({ theme, resolved });

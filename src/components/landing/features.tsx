@@ -61,9 +61,9 @@ export function Features() {
           {features.map((feature) => (
             <div
               key={feature.title}
-              className="group rounded-[var(--radius-lg)] border border-border p-6 transition-shadow hover:shadow-sm dark:hover:border-dark-border"
+              className="group rounded-[var(--radius-lg)] border border-border p-6 transition-all hover:border-border-hover hover:shadow-md dark:hover:shadow-none dark:hover:border-dark-border"
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-md)] bg-coral-light text-coral transition-colors group-hover:bg-coral group-hover:text-white dark:bg-coral-900/30 dark:group-hover:bg-coral">
+              <div className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-md)] bg-coral-light text-coral transition-all group-hover:bg-coral group-hover:text-white group-hover:shadow-sm group-hover:shadow-coral/20 dark:bg-coral-900/30 dark:group-hover:bg-coral">
                 <feature.icon className="h-5 w-5" />
               </div>
               <h3 className="mt-4 text-base font-semibold text-text-primary">

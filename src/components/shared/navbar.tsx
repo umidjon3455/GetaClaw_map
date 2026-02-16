@@ -15,7 +15,7 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-xl">
       <nav className="mx-auto flex h-16 max-w-[1200px] items-center justify-between px-5 sm:px-8">
         {/* Logo */}
         <Link
@@ -34,7 +34,7 @@ export function Navbar() {
               {...(link.external
                 ? { target: "_blank", rel: "noopener noreferrer" }
                 : {})}
-              className="flex items-center gap-1.5 rounded-[var(--radius-md)] px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-sand/60 hover:text-text-primary dark:hover:bg-dark-elevated"
+              className="flex items-center gap-1.5 rounded-[var(--radius-md)] px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface hover:text-text-primary"
             >
               {link.label === "GitHub" && <Github className="h-4 w-4" />}
               {link.label}
@@ -44,7 +44,7 @@ export function Navbar() {
           <ThemeToggle />
           <Link
             href="/setup"
-            className="ml-3 rounded-[var(--radius-md)] bg-coral px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-coral-hover active:bg-coral-active"
+            className="ml-3 rounded-[var(--radius-md)] bg-coral px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-coral/20 transition-all hover:bg-coral-hover hover:shadow-md hover:shadow-coral/25 active:bg-coral-active"
           >
             Get Started
           </Link>
@@ -55,7 +55,7 @@ export function Navbar() {
           <ThemeToggle />
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="flex h-9 w-9 items-center justify-center rounded-[var(--radius-md)] text-text-secondary hover:bg-sand/60 dark:hover:bg-dark-elevated"
+            className="flex h-9 w-9 items-center justify-center rounded-[var(--radius-md)] text-text-secondary hover:bg-surface hover:text-text-primary"
             aria-label="Toggle menu"
           >
             {mobileOpen ? (
@@ -78,7 +78,7 @@ export function Navbar() {
               {...(link.external
                 ? { target: "_blank", rel: "noopener noreferrer" }
                 : {})}
-              className="flex items-center gap-2 rounded-[var(--radius-md)] px-3 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-sand/60 hover:text-text-primary dark:hover:bg-dark-elevated"
+              className="flex items-center gap-2 rounded-[var(--radius-md)] px-3 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-surface hover:text-text-primary"
             >
               {link.label === "GitHub" && <Github className="h-4 w-4" />}
               {link.label}
@@ -87,7 +87,7 @@ export function Navbar() {
           <Link
             href="/setup"
             onClick={() => setMobileOpen(false)}
-            className="mt-2 flex w-full items-center justify-center rounded-[var(--radius-md)] bg-coral px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-coral-hover"
+            className="mt-2 flex w-full items-center justify-center rounded-[var(--radius-md)] bg-coral px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-coral/20 transition-all hover:bg-coral-hover hover:shadow-md hover:shadow-coral/25"
           >
             Get Started
           </Link>
