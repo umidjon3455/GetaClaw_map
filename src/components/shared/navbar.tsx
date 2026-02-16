@@ -44,7 +44,7 @@ export function Navbar() {
           <ThemeToggle />
           <Link
             href="/setup"
-            className="ml-3 rounded-[var(--radius-md)] bg-coral px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-coral/20 transition-all hover:bg-coral-hover hover:shadow-md hover:shadow-coral/25 active:bg-coral-active"
+            className="ml-3 rounded-[var(--radius-md)] bg-coral px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-coral-hover active:bg-coral-active"
           >
             Get Started
           </Link>
@@ -87,7 +87,7 @@ export function Navbar() {
           <Link
             href="/setup"
             onClick={() => setMobileOpen(false)}
-            className="mt-2 flex w-full items-center justify-center rounded-[var(--radius-md)] bg-coral px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-coral/20 transition-all hover:bg-coral-hover hover:shadow-md hover:shadow-coral/25"
+            className="mt-2 flex w-full items-center justify-center rounded-[var(--radius-md)] bg-coral px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-coral-hover"
           >
             Get Started
           </Link>

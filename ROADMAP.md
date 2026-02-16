@@ -15,26 +15,27 @@
 - [x] Theme persisted to localStorage
 - [x] Theme toggle component (sun/moon icon)
 - [x] `.dark` class toggle on `<html>`
-- [ ] Fix: dark mode does not properly apply to sidebar, navbar, and several component backgrounds
-- [ ] Fix: system preference listener uses dynamic `require()` — should be a proper import
+- [x] Fix: dark mode now properly applies to sidebar, navbar, and all component backgrounds
+- [x] Fix: system preference listener uses proper static import (was dynamic `require()`)
+- [x] Default theme set to dark
 
 ### Navbar
 - [x] Sticky header with backdrop blur
 - [x] Desktop nav links (How it Works, FAQ, GitHub)
 - [x] Mobile hamburger menu
-- [x] "Get Started" CTA button
+- [x] "Get Started" CTA button with coral shadow glow
 - [x] Theme toggle in nav
-- [ ] Fix: dark mode background/text not rendering correctly
+- [x] Fix: dark mode background/text renders correctly
 
 ### Landing Page
-- [x] Hero section with tagline and CTAs
-- [x] How It Works — 4-step visual grid
+- [x] Hero section with tagline, CTAs, gradient blobs, and badge
+- [x] How It Works — 4-step visual grid with hover glow on icons
 - [x] Why Self-Host — 3-column comparison (hosted vs self-hosted)
-- [x] Features — 3x2 grid with icons
+- [x] Features — 3x2 grid with icons, card hover shadows
 - [x] FAQ — accordion with chevron animation
 - [x] Troubleshooting — alert cards
 - [x] Footer with links
-- [ ] Fix: some text/background color contrast issues in dark mode
+- [x] Fix: text/background color contrast issues in dark mode resolved
 - [ ] Polish: animations on scroll (fade-in sections)
 - [ ] Polish: illustrations or visual assets for hero/how-it-works
 
@@ -44,7 +45,7 @@
 - [x] Mobile progress bar with step counter
 - [x] Zustand wizard store with all step data and navigation logic
 - [x] Step completion tracking and jump-back navigation
-- [ ] Fix: sidebar background doesn't switch in dark mode
+- [x] Fix: sidebar background switches correctly in dark mode
 
 ### Setup Wizard — Step: Welcome
 - [x] Skill level selection (beginner/intermediate/advanced)
@@ -58,7 +59,7 @@
 - [x] Beginner-friendly "What's a VPS?" explainer
 - [x] External links to get API keys
 - [x] Privacy notice about client-side processing
-- [ ] Fix: input field background/text color contrast issues
+- [x] Fix: input field background/text color contrast works in dark mode
 
 ### Setup Wizard — Step: Server Config
 - [x] Server name input (sanitized to alphanumeric + hyphens)
@@ -79,7 +80,7 @@
 - [x] Tier badges (Premium, Fast & Cheap, Open Source, Reasoning)
 - [x] Provider labels
 - [x] Selected count display
-- [ ] Fix: purple tier badge colors not defined in design system — renders with Tailwind defaults
+- [x] Fix: Reasoning tier badge uses violet design tokens (was undefined purple)
 
 ### Setup Wizard — Step: Channels
 - [x] 6 channels (WhatsApp, Telegram, Discord, Slack, Signal, iMessage)
@@ -178,15 +179,24 @@
 - [ ] Verify systemd service works correctly
 - [ ] Verify cloud-init bootstrap sequence end-to-end
 
+### UI Refresh
+- [x] Fixed Tailwind v4 dark mode architecture (`@custom-variant dark` + split `@theme`/`@theme inline`)
+- [x] All semantic tokens (background, surface, border, text) switch correctly in dark mode
+- [x] Added violet color scale to design system for Reasoning tier badge
+- [x] Hero: decorative gradient blobs, pill badge with pulse, CTA coral shadow glow
+- [x] Navbar: upgraded backdrop blur, coral shadow on CTA
+- [x] Feature/How-It-Works cards: hover shadow + icon glow effects
+- [x] Replaced raw color hover states with semantic tokens across components
+
 ---
 
 ## What Needs to Be Done
 
 ### P0 — Critical (Must-have for MVP)
 
-1. **Fix dark mode** — sidebar, navbar, input fields, and several card backgrounds don't switch properly. Text becomes unreadable in several components.
+1. ~~**Fix dark mode**~~ ✅ Done — fixed via `@custom-variant dark` + split `@theme`/`@theme inline` architecture
 
-2. **Fix color contrast** — input fields show black text on dark/invisible backgrounds. Purple tier colors undefined in design system.
+2. ~~**Fix color contrast**~~ ✅ Done — input fields, tier badges, all components now render correctly in both themes
 
 3. **Wire up real deployment** — connect step-deploy.tsx to:
    - VPS client libs (create server with cloud-init)

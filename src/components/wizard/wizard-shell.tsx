@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useWizardStore, STEP_ORDER, type WizardStep } from "@/lib/store/wizard-store";
-import { WizardSidebar } from "./wizard-sidebar";
+import { WizardStepBar } from "./wizard-step-bar";
 import { WizardProgress } from "./wizard-progress";
 import { StepWelcome } from "./step-welcome";
 import { StepVpsProvider } from "./step-vps-provider";
@@ -28,33 +28,30 @@ const STEP_COMPONENTS: Record<WizardStep, React.ComponentType> = {
 
 export function WizardShell() {
   const currentStep = useWizardStore((s) => s.currentStep);
-  const currentIndex = STEP_ORDER.indexOf(currentStep);
   const StepComponent = STEP_COMPONENTS[currentStep];
 
   return (
-    <div className="flex min-h-[calc(100vh-64px)]">
-      {/* Desktop sidebar */}
-      <WizardSidebar className="hidden lg:flex" />
+    <div className="flex min-h-[calc(100vh-64px)] flex-col">
+      {/* Mobile progress bar (top) */}
+      <WizardProgress className="lg:hidden" />
 
-      <div className="flex flex-1 flex-col">
-        {/* Mobile progress bar */}
-        <WizardProgress className="lg:hidden" />
+      {/* Desktop step bar (top, scrolls with content) */}
+      <WizardStepBar className="hidden lg:block" />
 
-        {/* Step content */}
-        <div className="flex flex-1 items-start justify-center px-5 py-8 sm:px-8 sm:py-12">
-          <div className="w-full max-w-2xl">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentStep}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
-              >
-                <StepComponent />
-              </motion.div>
-            </AnimatePresence>
-          </div>
+      {/* Step content */}
+      <div className="flex flex-1 items-start justify-center px-5 py-8 sm:px-8 sm:py-12">
+        <div className="w-full max-w-2xl">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentStep}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+            >
+              <StepComponent />
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
     </div>
