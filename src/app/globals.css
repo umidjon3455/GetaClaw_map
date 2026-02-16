@@ -1,26 +1,147 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ============================================
+   Get a Claw — Coral Claw Design System
+   ============================================ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* --- Colors --- */
+  --color-coral: #E8634A;
+  --color-coral-hover: #D4553D;
+  --color-coral-active: #C04A35;
+  --color-coral-light: #FDF0ED;
+  --color-coral-50: #FEF5F3;
+  --color-coral-100: #FDE8E3;
+  --color-coral-200: #FCD5CC;
+  --color-coral-300: #F8B0A0;
+  --color-coral-400: #F08B74;
+  --color-coral-500: #E8634A;
+  --color-coral-600: #D4553D;
+  --color-coral-700: #B13F2B;
+  --color-coral-800: #923627;
+  --color-coral-900: #793226;
+
+  --color-charcoal: #1A1A2E;
+  --color-charcoal-light: #2A2A42;
+
+  --color-warm-white: #FAF8F5;
+  --color-sand: #E8E0D4;
+  --color-sand-dark: #D4CBC0;
+
+  --color-slate: #6B7280;
+  --color-slate-light: #9CA3AF;
+
+  --color-sea-green: #2D9F7F;
+  --color-sea-green-light: #34B891;
+  --color-sea-green-dark: #257A63;
+
+  --color-amber: #E5A431;
+  --color-amber-light: #F5C462;
+
+  --color-soft-red: #D94452;
+  --color-soft-red-light: #E8606D;
+
+  /* Dark mode surface colors */
+  --color-dark-bg: #0F0F1A;
+  --color-dark-surface: #1A1A2E;
+  --color-dark-elevated: #252540;
+  --color-dark-border: #333355;
+
+  /* Semantic tokens */
+  --color-background: var(--color-warm-white);
+  --color-foreground: var(--color-charcoal);
+  --color-surface: #FFFFFF;
+  --color-surface-elevated: #FFFFFF;
+  --color-border: var(--color-sand);
+  --color-border-hover: var(--color-sand-dark);
+  --color-text-primary: var(--color-charcoal);
+  --color-text-secondary: var(--color-slate);
+  --color-text-muted: var(--color-slate-light);
+  --color-primary: var(--color-coral);
+  --color-primary-hover: var(--color-coral-hover);
+  --color-success: var(--color-sea-green);
+  --color-warning: var(--color-amber);
+  --color-error: var(--color-soft-red);
+
+  /* --- Typography --- */
+  --font-heading: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-sans: var(--font-body);
+
+  /* --- Spacing --- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* --- Dark mode overrides --- */
+.dark {
+  --color-background: var(--color-dark-bg);
+  --color-foreground: var(--color-sand);
+  --color-surface: var(--color-dark-surface);
+  --color-surface-elevated: var(--color-dark-elevated);
+  --color-border: var(--color-dark-border);
+  --color-border-hover: #444466;
+  --color-text-primary: var(--color-sand);
+  --color-text-secondary: #9CA3AF;
+  --color-text-muted: #6B7280;
+}
+
+/* --- Base styles --- */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+}
+
+code, pre, kbd {
+  font-family: var(--font-mono);
+}
+
+/* --- Selection --- */
+::selection {
+  background-color: var(--color-coral-200);
+  color: var(--color-charcoal);
+}
+
+.dark ::selection {
+  background-color: var(--color-coral-700);
+  color: var(--color-sand);
+}
+
+/* --- Focus ring utility --- */
+.focus-ring {
+  @apply outline-none ring-2 ring-coral/40 ring-offset-2 ring-offset-background;
+}
+
+/* --- Scrollbar styling --- */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-sand-dark);
+  border-radius: 3px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: var(--color-dark-border);
 }

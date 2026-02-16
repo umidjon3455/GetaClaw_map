@@ -1,0 +1,40 @@
+{
+  "name": "@getaclaw/agent",
+  "version": "0.1.0",
+  "description": "Lightweight daemon for orchestrating OpenClaw setup and management on a VPS",
+  "type": "module",
+  "bin": {
+    "getaclaw-agent": "./dist/cli.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "openclaw",
+    "agent",
+    "vps",
+    "setup"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^13.1.0",
+    "selfsigned": "^2.4.1",
+    "winston": "^3.17.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.0",
+    "@types/ws": "^8.5.14",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}
