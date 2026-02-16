@@ -26,6 +26,8 @@ const ALLOWED_COMMANDS = new Set([
   'whoami',
   'id',
   'hostname',
+  'useradd',
+  'getent',
 ]);
 
 export interface ExecResult {

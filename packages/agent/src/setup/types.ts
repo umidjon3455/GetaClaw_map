@@ -21,7 +21,7 @@ export interface SetupConfig {
   openrouterApiKey: string;
   selectedModels: string[];
   securityMode: 'password' | 'tailscale';
-  gatewayPassword?: string;
+  gatewayToken?: string;
   tailscaleAuthKey?: string;
   channels: ChannelConfig[];
 }
@@ -43,6 +43,6 @@ export interface SetupStep {
   name: StepName;
   description: string;
   required: boolean;
-  shouldRun: (config: SetupConfig) => boolean;
+  shouldRun: (config: SetupConfig, results: Map<string, unknown>) => boolean;
   execute: (ctx: StepContext) => Promise<void>;
 }

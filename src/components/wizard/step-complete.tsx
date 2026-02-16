@@ -5,18 +5,20 @@ import { ExternalLink, Copy, Eye, EyeOff, Check } from "lucide-react";
 import { useState } from "react";
 
 export function StepComplete() {
-  const { securityMode, serverName } = useWizardStore();
+  const { securityMode, serverName, deployResult } =
+    useWizardStore();
   const [showToken, setShowToken] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
 
-  // These would come from the actual deployment result
-  const serverIp = "203.0.113.42";
-  const gatewayToken = "gw_a7f3b2c1d9e8f4a5b6c7d8e9f0a1b2c3";
+  const serverIp = deployResult?.serverIp ?? "—";
+  const gatewayToken = deployResult?.gatewayToken ?? "";
   const controlUiUrl =
-    securityMode === "tailscale"
+    deployResult?.controlUiUrl ??
+    (securityMode === "tailscale"
       ? `https://${serverName}.tail1234.ts.net/`
-      : `http://${serverIp}:18789/`;
-  const tailscaleHostname = `${serverName}.tail1234.ts.net`;
+      : `https://${serverIp}/#token=${gatewayToken}`);
+  const tailscaleHostname =
+    deployResult?.tailscaleIp ?? `${serverName}.tail1234.ts.net`;
 
   const copyToClipboard = (text: string, key: string) => {
     navigator.clipboard.writeText(text);
@@ -44,7 +46,7 @@ export function StepComplete() {
       {/* Control UI link */}
       <div className="mt-8 rounded-[var(--radius-lg)] border border-sea-green/30 bg-sea-green/5 p-5">
         <p className="text-sm font-medium text-text-primary">Control UI</p>
-        <p className="mt-1 font-mono text-sm text-sea-green">
+        <p className="mt-1 truncate font-mono text-sm text-sea-green" title={controlUiUrl}>
           {controlUiUrl}
         </p>
         <a
@@ -94,29 +96,31 @@ export function StepComplete() {
             </div>
           )}
 
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs text-text-muted">Gateway token</p>
-              <p className="font-mono text-sm text-text-primary">
-                {showToken ? gatewayToken : "••••••••••••••••"}
-              </p>
+          {gatewayToken && (
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-text-muted">Access token</p>
+                <p className="font-mono text-sm text-text-primary">
+                  {showToken ? gatewayToken : "••••••••••••••••"}
+                </p>
+              </div>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => setShowToken(!showToken)}
+                  className="rounded-[var(--radius-sm)] px-2 py-1 text-text-muted hover:bg-sand/40 hover:text-text-secondary dark:hover:bg-dark-elevated"
+                >
+                  {showToken ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
+                </button>
+                <button
+                  onClick={() => copyToClipboard(gatewayToken, "token")}
+                  className="flex items-center gap-1 rounded-[var(--radius-sm)] px-2 py-1 text-xs text-text-muted hover:bg-sand/40 hover:text-text-secondary dark:hover:bg-dark-elevated"
+                >
+                  {copied === "token" ? <Check className="h-3 w-3 text-sea-green" /> : <Copy className="h-3 w-3" />}
+                  {copied === "token" ? "Copied" : "Copy"}
+                </button>
+              </div>
             </div>
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => setShowToken(!showToken)}
-                className="rounded-[var(--radius-sm)] px-2 py-1 text-text-muted hover:bg-sand/40 hover:text-text-secondary dark:hover:bg-dark-elevated"
-              >
-                {showToken ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
-              </button>
-              <button
-                onClick={() => copyToClipboard(gatewayToken, "token")}
-                className="flex items-center gap-1 rounded-[var(--radius-sm)] px-2 py-1 text-xs text-text-muted hover:bg-sand/40 hover:text-text-secondary dark:hover:bg-dark-elevated"
-              >
-                {copied === "token" ? <Check className="h-3 w-3 text-sea-green" /> : <Copy className="h-3 w-3" />}
-                {copied === "token" ? "Copied" : "Copy"}
-              </button>
-            </div>
-          </div>
+          )}
         </div>
       </div>
 
@@ -146,9 +150,14 @@ export function StepComplete() {
       </div>
 
       <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-        <button className="rounded-[var(--radius-md)] bg-coral px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-coral-hover">
+        <a
+          href={controlUiUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center rounded-[var(--radius-md)] bg-coral px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-coral-hover"
+        >
           Go to Dashboard
-        </button>
+        </a>
         <button className="rounded-[var(--radius-md)] border border-border px-5 py-2.5 text-sm font-medium text-text-primary transition-colors hover:bg-sand/40 dark:hover:bg-dark-elevated">
           Set Up Another Instance
         </button>

@@ -4,6 +4,7 @@ import { logger } from '../utils/logger.js';
 import { handleHealthAction } from './health.js';
 import { getConfig, setConfig } from './config.js';
 import { listChannels, addChannel, removeChannel } from './channels.js';
+import { handleDevicesList, handleDevicesApprove, handleDevicesReject } from './devices.js';
 
 export async function handleManageAction(
   msg: ClientMessage,
@@ -41,6 +42,18 @@ export async function handleManageAction(
 
     case 'manage.channels.remove':
       await handleChannelsRemove(msg, sendEvent);
+      break;
+
+    case 'manage.devices.list':
+      await handleDevicesList(msg, sendEvent);
+      break;
+
+    case 'manage.devices.approve':
+      await handleDevicesApprove(msg, sendEvent);
+      break;
+
+    case 'manage.devices.reject':
+      await handleDevicesReject(msg, sendEvent);
       break;
 
     case 'manage.tailscale.status':

@@ -114,6 +114,36 @@ program
 
     await server.start();
     logger.info(`Agent server running on port ${config.port}`);
+
+    // Auto-detect init-config and start setup if present
+    const initConfigPath = path.join(configDir, 'init-config.json');
+    if (fs.existsSync(initConfigPath)) {
+      try {
+        const initConfig = JSON.parse(fs.readFileSync(initConfigPath, 'utf-8'));
+        const setupConfig = initConfig.setup;
+        if (setupConfig) {
+          logger.info('Found init-config.json, auto-starting setup');
+          server.autoStartSetup(setupConfig).then((result) => {
+            // Only rename to .done if setup succeeded
+            const donePath = path.join(configDir, 'init-config.done.json');
+            if (result.success) {
+              fs.renameSync(initConfigPath, donePath);
+              logger.info('Setup succeeded, renamed init-config.json to init-config.done.json');
+            } else {
+              logger.warn('Setup finished with errors, keeping init-config.json for retry');
+            }
+          }).catch((err) => {
+            logger.error('Auto-setup error', {
+              error: err instanceof Error ? err.message : String(err),
+            });
+          });
+        }
+      } catch (err) {
+        logger.error('Failed to read init-config.json', {
+          error: err instanceof Error ? err.message : String(err),
+        });
+      }
+    }
   });
 
 // --- service ---
@@ -133,7 +163,6 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-User=getaclaw-agent
 ExecStart=/usr/bin/getaclaw-agent serve
 Restart=always
 RestartSec=5
@@ -147,6 +176,10 @@ WantedBy=multi-user.target
     const servicePath = '/etc/systemd/system/getaclaw-agent.service';
 
     logger.info('Installing systemd service...');
+
+    // Ensure log directory exists
+    await safeExec('mkdir', ['-p', '/var/log/getaclaw']);
+
     fs.writeFileSync(servicePath, serviceContent, 'utf-8');
 
     await safeExec('systemctl', ['daemon-reload']);

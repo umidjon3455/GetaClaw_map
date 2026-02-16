@@ -22,9 +22,9 @@ const DO_REGIONS = [
 ];
 
 const HETZNER_SIZES = [
-  { id: "cx22", name: "CX22", specs: "2 vCPU, 4 GB RAM", price: "€3.79/mo", recommended: true },
-  { id: "cx32", name: "CX32", specs: "4 vCPU, 8 GB RAM", price: "€7.59/mo" },
-  { id: "cx42", name: "CX42", specs: "8 vCPU, 16 GB RAM", price: "€14.39/mo" },
+  { id: "cx23", name: "CX23", specs: "2 vCPU, 4 GB RAM", price: "€3.59/mo", recommended: true },
+  { id: "cx33", name: "CX33", specs: "4 vCPU, 8 GB RAM", price: "€5.99/mo" },
+  { id: "cx43", name: "CX43", specs: "8 vCPU, 16 GB RAM", price: "€10.79/mo" },
 ];
 
 const DO_SIZES = [

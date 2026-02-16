@@ -4,16 +4,17 @@ import { useWizardStore } from "@/lib/store/wizard-store";
 import { Eye, EyeOff, ExternalLink, Check } from "lucide-react";
 import { useState } from "react";
 
+// Model IDs must match OpenRouter's API (https://openrouter.ai/api/v1/models)
 const MODELS = [
   {
-    id: "anthropic/claude-sonnet-4-5-20250929",
+    id: "anthropic/claude-sonnet-4.5",
     name: "Claude Sonnet 4.5",
     provider: "Anthropic",
     tier: "Premium",
     description: "Excellent all-rounder. Great at coding, analysis, and conversation.",
   },
   {
-    id: "anthropic/claude-haiku-4-5-20251001",
+    id: "anthropic/claude-haiku-4.5",
     name: "Claude Haiku 4.5",
     provider: "Anthropic",
     tier: "Fast & Cheap",
@@ -34,14 +35,14 @@ const MODELS = [
     description: "Lightweight and fast. Good balance of quality and speed.",
   },
   {
-    id: "google/gemini-2.5-pro-preview",
+    id: "google/gemini-2.5-pro",
     name: "Gemini 2.5 Pro",
     provider: "Google",
     tier: "Premium",
     description: "Google's most capable model. Excellent context window.",
   },
   {
-    id: "google/gemini-2.5-flash-preview",
+    id: "google/gemini-2.5-flash",
     name: "Gemini 2.5 Flash",
     provider: "Google",
     tier: "Fast & Cheap",

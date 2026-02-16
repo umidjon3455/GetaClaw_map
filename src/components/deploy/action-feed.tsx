@@ -10,6 +10,7 @@ export interface ActionStep {
   status: "pending" | "running" | "success" | "error" | "warning";
   progress?: number;
   duration?: number;
+  estimatedDuration?: number;
   logs?: string[];
   error?: string;
 }

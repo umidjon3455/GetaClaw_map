@@ -44,10 +44,13 @@ export class SetupOrchestrator extends EventEmitter {
     }
   }
 
-  getStatus(): { state: OrchestratorState; steps: StepStatus[] } {
+  getStatus() {
     return {
       state: this.state,
       steps: Array.from(this.stepStatuses.values()),
+      ...(this.state === 'completed' || this.state === 'error'
+        ? { results: Object.fromEntries(this.results) }
+        : {}),
     };
   }
 
@@ -68,7 +71,7 @@ export class SetupOrchestrator extends EventEmitter {
     };
 
     for (const step of ALL_STEPS) {
-      if (!step.shouldRun(this.config)) {
+      if (!step.shouldRun(this.config, this.results)) {
         this.updateStepStatus(step.name, 'skipped');
         logger.info(`Skipping step: ${step.name}`);
         continue;

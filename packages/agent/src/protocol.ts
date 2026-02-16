@@ -43,6 +43,9 @@ export type ManageAction =
   | 'manage.channels.list'
   | 'manage.channels.add'
   | 'manage.channels.remove'
+  | 'manage.devices.list'
+  | 'manage.devices.approve'
+  | 'manage.devices.reject'
   | 'manage.tailscale.status';
 
 export type HealthAction = 'health.check' | 'health.logs';

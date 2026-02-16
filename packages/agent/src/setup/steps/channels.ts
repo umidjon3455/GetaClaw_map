@@ -8,7 +8,7 @@ export const channelsStep: SetupStep = {
   name: 'channels',
   description: 'Configure messaging channels',
   required: false,
-  shouldRun: (config) => config.channels.length > 0,
+  shouldRun: (config, results) => config.channels.length > 0 && !!results.get('openclawVersion'),
 
   async execute(ctx: StepContext): Promise<void> {
     const channels = ctx.config.channels;

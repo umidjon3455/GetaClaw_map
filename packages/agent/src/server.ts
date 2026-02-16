@@ -86,6 +86,13 @@ export class AgentServer {
       return;
     }
 
+    if (req.method === 'GET' && req.url === '/setup-status') {
+      const status = this.orchestrator.getStatus();
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(status));
+      return;
+    }
+
     if (req.method === 'GET' && req.url === '/fingerprint') {
       const cert = fs.readFileSync(this.config.certPath, 'utf-8');
       const fingerprint = computeCertFingerprint(cert);
@@ -325,6 +332,20 @@ export class AgentServer {
           status: 'error',
           data: { message: `Unknown setup action: ${msg.action}` },
         });
+    }
+  }
+
+  async autoStartSetup(config: Record<string, unknown>): Promise<Record<string, unknown>> {
+    logger.info('Auto-starting setup from init-config');
+    try {
+      const result = await this.orchestrator.run(config);
+      logger.info('Auto-setup finished', { success: result.success });
+      return result;
+    } catch (err) {
+      logger.error('Auto-setup failed', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return { success: false, error: err instanceof Error ? err.message : String(err) };
     }
   }
 

@@ -26,6 +26,10 @@ packages/*/dist/
 # misc
 .DS_Store
 *.pem
+*.tgz
+
+# claude code
+.claude/
 
 # debug
 npm-debug.log*

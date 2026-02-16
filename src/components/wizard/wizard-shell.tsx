@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { useWizardStore, STEP_ORDER, type WizardStep } from "@/lib/store/wizard-store";
 import { WizardStepBar } from "./wizard-step-bar";
 import { WizardProgress } from "./wizard-progress";
@@ -29,6 +30,23 @@ const STEP_COMPONENTS: Record<WizardStep, React.ComponentType> = {
 export function WizardShell() {
   const currentStep = useWizardStore((s) => s.currentStep);
   const StepComponent = STEP_COMPONENTS[currentStep];
+
+  // Wait for localStorage hydration before rendering to avoid flash
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => {
+    const unsub = useWizardStore.persist.onFinishHydration(() =>
+      setHydrated(true)
+    );
+    // Already hydrated (synchronous storage)
+    if (useWizardStore.persist.hasHydrated()) setHydrated(true);
+    return unsub;
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentStep]);
+
+  if (!hydrated) return null;
 
   return (
     <div className="flex min-h-[calc(100vh-64px)] flex-col">

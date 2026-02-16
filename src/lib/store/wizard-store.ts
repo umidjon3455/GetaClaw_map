@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { persist, type StorageValue } from "zustand/middleware";
+import type { DeployResult } from "@/lib/deploy/orchestrator";
 
 export type WizardStep =
   | "welcome"
@@ -42,6 +44,14 @@ const STEP_ORDER: WizardStep[] = [
   "complete",
 ];
 
+export interface DeployIntermediate {
+  agentPort: number;
+  pairingToken: string;
+  gatewayToken: string;
+  serverId?: string;
+  serverIp?: string;
+}
+
 interface WizardState {
   // Navigation
   currentStep: WizardStep;
@@ -61,7 +71,6 @@ interface WizardState {
 
   // Step 4: Security
   securityMode: SecurityMode | null;
-  gatewayPassword: string;
   tailscaleAuthKey: string;
 
   // Step 5: Models
@@ -74,6 +83,10 @@ interface WizardState {
   // Deploy state
   deployStarted: boolean;
   deployComplete: boolean;
+  deployResult: DeployResult | null;
+  deployError: string | null;
+  deployIntermediate: DeployIntermediate | null;
+  agentInstallUrl: string;
 
   // Actions
   goToStep: (step: WizardStep) => void;
@@ -92,13 +105,17 @@ interface WizardState {
   setServerSize: (size: string) => void;
   setServerName: (name: string) => void;
   setSecurityMode: (mode: SecurityMode) => void;
-  setGatewayPassword: (password: string) => void;
   setTailscaleAuthKey: (key: string) => void;
   setOpenrouterApiKey: (key: string) => void;
   setSelectedModels: (models: string[]) => void;
   setChannelConfig: (channel: Channel, config: ChannelConfig) => void;
   setDeployStarted: (started: boolean) => void;
   setDeployComplete: (complete: boolean) => void;
+  setDeployResult: (result: DeployResult | null) => void;
+  setDeployError: (error: string | null) => void;
+  setDeployIntermediate: (data: DeployIntermediate | null) => void;
+  updateDeployIntermediate: (updates: Partial<DeployIntermediate>) => void;
+  setAgentInstallUrl: (url: string) => void;
 
   // Reset
   reset: () => void;
@@ -114,84 +131,169 @@ const initialState = {
   serverSize: "",
   serverName: "",
   securityMode: null as SecurityMode | null,
-  gatewayPassword: "",
   tailscaleAuthKey: "",
   openrouterApiKey: "",
   selectedModels: [] as string[],
   channelConfigs: {} as Partial<Record<Channel, ChannelConfig>>,
   deployStarted: false,
   deployComplete: false,
+  deployResult: null as DeployResult | null,
+  deployError: null as string | null,
+  deployIntermediate: null as DeployIntermediate | null,
+  agentInstallUrl: "",
 };
 
-export const useWizardStore = create<WizardState>((set, get) => ({
-  ...initialState,
-
-  goToStep: (step) => {
-    if (get().canProceedToStep(step)) {
-      set({ currentStep: step });
+// Custom localStorage adapter that converts Set<WizardStep> ↔ WizardStep[]
+const wizardStorage = {
+  getItem: (name: string): StorageValue<WizardState> | null => {
+    const str = localStorage.getItem(name);
+    if (!str) return null;
+    try {
+      const { state, version } = JSON.parse(str);
+      return {
+        state: {
+          ...state,
+          completedSteps: new Set(state.completedSteps || []),
+        },
+        version,
+      };
+    } catch {
+      return null;
     }
   },
+  setItem: (name: string, value: StorageValue<WizardState>) => {
+    const serializable = {
+      state: {
+        ...value.state,
+        completedSteps: [...(value.state.completedSteps || [])],
+      },
+      version: value.version,
+    };
+    localStorage.setItem(name, JSON.stringify(serializable));
+  },
+  removeItem: (name: string) => localStorage.removeItem(name),
+};
 
-  nextStep: () => {
-    const currentIndex = STEP_ORDER.indexOf(get().currentStep);
-    if (currentIndex < STEP_ORDER.length - 1) {
-      const state = get();
-      const completed = new Set(state.completedSteps);
-      completed.add(state.currentStep);
-      set({
-        currentStep: STEP_ORDER[currentIndex + 1],
-        completedSteps: completed,
-      });
+export const useWizardStore = create<WizardState>()(
+  persist(
+    (set, get) => ({
+      ...initialState,
+
+      goToStep: (step) => {
+        if (get().canProceedToStep(step)) {
+          set({ currentStep: step });
+        }
+      },
+
+      nextStep: () => {
+        const currentIndex = STEP_ORDER.indexOf(get().currentStep);
+        if (currentIndex < STEP_ORDER.length - 1) {
+          const state = get();
+          const completed = new Set(state.completedSteps);
+          completed.add(state.currentStep);
+          set({
+            currentStep: STEP_ORDER[currentIndex + 1],
+            completedSteps: completed,
+          });
+        }
+      },
+
+      prevStep: () => {
+        const currentIndex = STEP_ORDER.indexOf(get().currentStep);
+        if (currentIndex > 0) {
+          set({ currentStep: STEP_ORDER[currentIndex - 1] });
+        }
+      },
+
+      markStepCompleted: (step) => {
+        const completed = new Set(get().completedSteps);
+        completed.add(step);
+        set({ completedSteps: completed });
+      },
+
+      canProceedToStep: (step) => {
+        const targetIndex = STEP_ORDER.indexOf(step);
+        if (targetIndex === 0) return true;
+
+        // Can always go back to completed steps
+        if (get().completedSteps.has(step)) return true;
+
+        // Can go to the next uncompleted step if current is at targetIndex - 1
+        const currentIndex = STEP_ORDER.indexOf(get().currentStep);
+        return targetIndex <= currentIndex + 1;
+      },
+
+      currentStepIndex: () => STEP_ORDER.indexOf(get().currentStep),
+      totalSteps: () => STEP_ORDER.length,
+
+      setSkillLevel: (skillLevel) => set({ skillLevel }),
+      setVpsProvider: (vpsProvider) => set({ vpsProvider }),
+      setVpsApiKey: (vpsApiKey) => set({ vpsApiKey }),
+      setServerRegion: (serverRegion) => set({ serverRegion }),
+      setServerSize: (serverSize) => set({ serverSize }),
+      setServerName: (serverName) => set({ serverName }),
+      setSecurityMode: (securityMode) => set({ securityMode }),
+      setTailscaleAuthKey: (tailscaleAuthKey) => set({ tailscaleAuthKey }),
+      setOpenrouterApiKey: (openrouterApiKey) => set({ openrouterApiKey }),
+      setSelectedModels: (selectedModels) => set({ selectedModels }),
+      setChannelConfig: (channel, config) =>
+        set((state) => ({
+          channelConfigs: { ...state.channelConfigs, [channel]: config },
+        })),
+      setDeployStarted: (deployStarted) => set({ deployStarted }),
+      setDeployComplete: (deployComplete) => set({ deployComplete }),
+      setDeployResult: (deployResult) => set({ deployResult }),
+      setDeployError: (deployError) => set({ deployError }),
+      setDeployIntermediate: (deployIntermediate) => set({ deployIntermediate }),
+      updateDeployIntermediate: (updates) =>
+        set((state) => ({
+          deployIntermediate: state.deployIntermediate
+            ? { ...state.deployIntermediate, ...updates }
+            : null,
+        })),
+      setAgentInstallUrl: (agentInstallUrl) => set({ agentInstallUrl }),
+
+      reset: () =>
+        set({ ...initialState, completedSteps: new Set(), deployIntermediate: null }),
+    }),
+    {
+      name: "getaclaw-wizard",
+      storage: wizardStorage,
+      partialize: (state) => {
+        // Persist all data fields, exclude action functions
+        const {
+          goToStep: _1,
+          nextStep: _2,
+          prevStep: _3,
+          markStepCompleted: _4,
+          canProceedToStep: _5,
+          currentStepIndex: _6,
+          totalSteps: _7,
+          setSkillLevel: _8,
+          setVpsProvider: _9,
+          setVpsApiKey: _10,
+          setServerRegion: _11,
+          setServerSize: _12,
+          setServerName: _13,
+          setSecurityMode: _14,
+          setTailscaleAuthKey: _15,
+          setOpenrouterApiKey: _16,
+          setSelectedModels: _17,
+          setChannelConfig: _18,
+          setDeployStarted: _19,
+          setDeployComplete: _20,
+          setDeployResult: _21,
+          setDeployError: _22,
+          setDeployIntermediate: _23,
+          updateDeployIntermediate: _24,
+          setAgentInstallUrl: _25,
+          reset: _26,
+          ...data
+        } = state;
+        return data as WizardState;
+      },
     }
-  },
-
-  prevStep: () => {
-    const currentIndex = STEP_ORDER.indexOf(get().currentStep);
-    if (currentIndex > 0) {
-      set({ currentStep: STEP_ORDER[currentIndex - 1] });
-    }
-  },
-
-  markStepCompleted: (step) => {
-    const completed = new Set(get().completedSteps);
-    completed.add(step);
-    set({ completedSteps: completed });
-  },
-
-  canProceedToStep: (step) => {
-    const targetIndex = STEP_ORDER.indexOf(step);
-    if (targetIndex === 0) return true;
-
-    // Can always go back to completed steps
-    if (get().completedSteps.has(step)) return true;
-
-    // Can go to the next uncompleted step if current is at targetIndex - 1
-    const currentIndex = STEP_ORDER.indexOf(get().currentStep);
-    return targetIndex <= currentIndex + 1;
-  },
-
-  currentStepIndex: () => STEP_ORDER.indexOf(get().currentStep),
-  totalSteps: () => STEP_ORDER.length,
-
-  setSkillLevel: (skillLevel) => set({ skillLevel }),
-  setVpsProvider: (vpsProvider) => set({ vpsProvider }),
-  setVpsApiKey: (vpsApiKey) => set({ vpsApiKey }),
-  setServerRegion: (serverRegion) => set({ serverRegion }),
-  setServerSize: (serverSize) => set({ serverSize }),
-  setServerName: (serverName) => set({ serverName }),
-  setSecurityMode: (securityMode) => set({ securityMode }),
-  setGatewayPassword: (gatewayPassword) => set({ gatewayPassword }),
-  setTailscaleAuthKey: (tailscaleAuthKey) => set({ tailscaleAuthKey }),
-  setOpenrouterApiKey: (openrouterApiKey) => set({ openrouterApiKey }),
-  setSelectedModels: (selectedModels) => set({ selectedModels }),
-  setChannelConfig: (channel, config) =>
-    set((state) => ({
-      channelConfigs: { ...state.channelConfigs, [channel]: config },
-    })),
-  setDeployStarted: (deployStarted) => set({ deployStarted }),
-  setDeployComplete: (deployComplete) => set({ deployComplete }),
-
-  reset: () => set({ ...initialState, completedSteps: new Set() }),
-}));
+  )
+);
 
 export { STEP_ORDER };

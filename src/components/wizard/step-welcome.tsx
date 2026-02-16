@@ -44,7 +44,7 @@ export function StepWelcome() {
         {levels.map((level) => (
           <button
             key={level.id}
-            onClick={() => setSkillLevel(level.id)}
+            onClick={() => { setSkillLevel(level.id); nextStep(); }}
             className={`flex w-full items-start gap-4 rounded-[var(--radius-lg)] border p-4 text-left transition-colors ${
               skillLevel === level.id
                 ? "border-coral bg-coral-light dark:border-coral dark:bg-coral-900/20"

@@ -1,7 +1,7 @@
 "use client";
 
 import { Check, X, AlertTriangle, Loader2, Circle } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { ActionStep } from "./action-feed";
 
 const statusConfig = {
@@ -35,14 +35,80 @@ const statusConfig = {
   },
 };
 
+/** Simulated progress: fast start, asymptotically approaches 90% */
+function simulatedProgress(elapsed: number, estimated: number): number {
+  return 90 * (1 - Math.exp((-2.5 * elapsed) / estimated));
+}
+
 interface ActionCardProps {
   step: ActionStep;
 }
 
 export function ActionCard({ step }: ActionCardProps) {
   const [expanded, setExpanded] = useState(false);
+  const [elapsed, setElapsed] = useState(0);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const config = statusConfig[step.status];
   const Icon = config.icon;
+
+  // Live elapsed timer while running
+  useEffect(() => {
+    if (step.status === "running") {
+      setElapsed(0);
+      intervalRef.current = setInterval(() => {
+        setElapsed((prev) => prev + 1);
+      }, 1000);
+    } else {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    }
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+  }, [step.status]);
+
+  // Compute the progress bar width
+  const showSimulatedProgress =
+    step.status === "running" &&
+    step.estimatedDuration &&
+    step.progress === undefined;
+  const progressWidth =
+    step.status === "success"
+      ? 100
+      : showSimulatedProgress
+        ? simulatedProgress(elapsed, step.estimatedDuration!)
+        : step.progress;
+
+  // Duration / estimate badge
+  const timeBadge = (() => {
+    if (step.status === "running" && step.estimatedDuration) {
+      return (
+        <span className="shrink-0 font-mono text-xs text-coral">
+          {elapsed}s / ~{step.estimatedDuration}s
+        </span>
+      );
+    }
+    if (step.status === "pending" && step.estimatedDuration) {
+      return (
+        <span className="shrink-0 font-mono text-xs text-text-muted">
+          ~{step.estimatedDuration}s
+        </span>
+      );
+    }
+    if (step.duration) {
+      return (
+        <span className="shrink-0 font-mono text-xs text-text-muted">
+          {step.duration}s
+        </span>
+      );
+    }
+    return null;
+  })();
 
   return (
     <div
@@ -75,15 +141,20 @@ export function ActionCard({ step }: ActionCardProps) {
             {step.description}
           </p>
 
-          {/* Progress bar */}
-          {step.status === "running" && step.progress !== undefined && (
-            <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-sand dark:bg-dark-elevated">
-              <div
-                className="h-full rounded-full bg-coral transition-all duration-500 ease-out"
-                style={{ width: `${step.progress}%` }}
-              />
-            </div>
-          )}
+          {/* Progress bar — explicit progress, simulated progress, or success fill */}
+          {(step.status === "running" || step.status === "success") &&
+            progressWidth !== undefined && (
+              <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-sand dark:bg-dark-elevated">
+                <div
+                  className={`h-full rounded-full transition-all ease-out ${
+                    step.status === "success"
+                      ? "bg-sea-green duration-300"
+                      : "bg-coral duration-500"
+                  }`}
+                  style={{ width: `${progressWidth}%` }}
+                />
+              </div>
+            )}
 
           {/* Error message */}
           {step.status === "error" && step.error && (
@@ -110,12 +181,8 @@ export function ActionCard({ step }: ActionCardProps) {
           )}
         </div>
 
-        {/* Duration */}
-        {step.duration && (
-          <span className="shrink-0 text-xs text-text-muted">
-            {step.duration}s
-          </span>
-        )}
+        {/* Time badge */}
+        {timeBadge}
       </div>
     </div>
   );

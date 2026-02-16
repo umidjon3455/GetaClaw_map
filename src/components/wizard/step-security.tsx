@@ -4,6 +4,7 @@ import { useWizardStore, type SecurityMode } from "@/lib/store/wizard-store";
 import { Lock, Shield, Eye, EyeOff, ExternalLink } from "lucide-react";
 import { useState } from "react";
 
+
 const securityOptions: {
   id: SecurityMode;
   icon: React.ElementType;
@@ -16,10 +17,10 @@ const securityOptions: {
   {
     id: "password",
     icon: Lock,
-    title: "Password Protection",
+    title: "Token URL",
     subtitle: "Simpler setup",
     description:
-      "Access your AI via a password-protected URL. Your server is exposed on the public internet with password auth.",
+      "Access your AI via a secure, unique URL. A private access token is generated automatically during deployment.",
     securityLevel: "Good",
     securityColor: "text-amber",
   },
@@ -39,19 +40,15 @@ export function StepSecurity() {
   const {
     securityMode,
     setSecurityMode,
-    gatewayPassword,
-    setGatewayPassword,
     tailscaleAuthKey,
     setTailscaleAuthKey,
     nextStep,
     prevStep,
-    skillLevel,
   } = useWizardStore();
-  const [showPassword, setShowPassword] = useState(false);
   const [showTsKey, setShowTsKey] = useState(false);
 
   const canContinue =
-    (securityMode === "password" && gatewayPassword.length >= 8) ||
+    securityMode === "password" ||
     (securityMode === "tailscale" && tailscaleAuthKey.trim().length > 10);
 
   return (
@@ -101,40 +98,6 @@ export function StepSecurity() {
           </button>
         ))}
       </div>
-
-      {/* Password config */}
-      {securityMode === "password" && (
-        <div className="mt-6">
-          <label className="block text-sm font-medium text-text-primary">
-            Gateway password
-          </label>
-          <p className="mt-1 text-sm text-text-secondary">
-            You&apos;ll use this password to access the OpenClaw Control UI.
-            Choose something strong.
-          </p>
-          <div className="relative mt-2">
-            <input
-              type={showPassword ? "text" : "password"}
-              value={gatewayPassword}
-              onChange={(e) => setGatewayPassword(e.target.value)}
-              placeholder="Min 8 characters"
-              className="w-full rounded-[var(--radius-md)] border border-border bg-background px-3 py-2.5 pr-10 text-sm text-text-primary placeholder:text-text-muted transition-colors focus:border-coral focus:outline-none focus:ring-2 focus:ring-coral/20 dark:bg-dark-surface"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary"
-            >
-              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-            </button>
-          </div>
-          {gatewayPassword.length > 0 && gatewayPassword.length < 8 && (
-            <p className="mt-1 text-xs text-soft-red">
-              Password must be at least 8 characters.
-            </p>
-          )}
-        </div>
-      )}
 
       {/* Tailscale config */}
       {securityMode === "tailscale" && (

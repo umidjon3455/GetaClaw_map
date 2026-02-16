@@ -2,14 +2,14 @@ import type { SetupStep, StepContext } from '../types.js';
 import { safeExec } from '../../utils/exec.js';
 import { logger } from '../../utils/logger.js';
 
-const HEALTH_CHECK_RETRIES = 5;
+const HEALTH_CHECK_RETRIES = 30;
 const HEALTH_CHECK_INTERVAL_MS = 3000;
 
 export const healthStep: SetupStep = {
   name: 'health',
   description: 'Verify OpenClaw gateway is running and accessible',
   required: true,
-  shouldRun: () => true,
+  shouldRun: (_config, results) => !!results.get('openclawVersion'),
 
   async execute(ctx: StepContext): Promise<void> {
     ctx.emit('log', 'health', 'Running final health checks...');

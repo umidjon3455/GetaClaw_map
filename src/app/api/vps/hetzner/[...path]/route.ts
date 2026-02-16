@@ -9,6 +9,8 @@ const ALLOWED_PATHS = [
   /^\/server_types$/,
   /^\/locations$/,
   /^\/images$/,
+  /^\/firewalls$/,
+  /^\/firewalls\/\d+\/actions\/set_rules$/,
 ];
 
 const ALLOWED_METHODS = ["GET", "POST", "DELETE"];
