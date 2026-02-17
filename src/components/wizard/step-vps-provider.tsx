@@ -10,6 +10,7 @@ const providers: {
   price: string;
   description: string;
   recommended?: boolean;
+  comingSoon?: boolean;
   apiKeyUrl: string;
   apiKeyHelp: string;
 }[] = [
@@ -30,6 +31,7 @@ const providers: {
     price: "from $6/mo",
     description:
       "Simple and popular. Global data centers. Great documentation.",
+    comingSoon: true,
     apiKeyUrl: "https://cloud.digitalocean.com/account/api/tokens",
     apiKeyHelp:
       "Go to API → Personal Access Tokens → Generate New Token (Full Access)",
@@ -75,11 +77,14 @@ export function StepVpsProvider() {
         {providers.map((provider) => (
           <button
             key={provider.id}
-            onClick={() => setVpsProvider(provider.id)}
+            onClick={() => !provider.comingSoon && setVpsProvider(provider.id)}
+            disabled={provider.comingSoon}
             className={`flex w-full items-start gap-4 rounded-[var(--radius-lg)] border p-4 text-left transition-colors ${
-              vpsProvider === provider.id
-                ? "border-coral bg-coral-light dark:border-coral dark:bg-coral-900/20"
-                : "border-border hover:border-border-hover dark:hover:border-dark-border"
+              provider.comingSoon
+                ? "border-border opacity-50 cursor-not-allowed"
+                : vpsProvider === provider.id
+                  ? "border-coral bg-coral-light dark:border-coral dark:bg-coral-900/20"
+                  : "border-border hover:border-border-hover dark:hover:border-dark-border"
             }`}
           >
             <div className="flex-1">
@@ -90,6 +95,11 @@ export function StepVpsProvider() {
                 {provider.recommended && (
                   <span className="rounded-full bg-sea-green/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-sea-green">
                     Recommended
+                  </span>
+                )}
+                {provider.comingSoon && (
+                  <span className="rounded-full bg-text-muted/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-text-muted">
+                    Coming Soon
                   </span>
                 )}
               </div>
