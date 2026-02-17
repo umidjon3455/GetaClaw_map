@@ -49,3 +49,6 @@ next-env.d.ts
 
 # docs (reference only, not part of the project source)
 /docs/
+
+# OG image generation scripts (contain API keys)
+/og-concepts/

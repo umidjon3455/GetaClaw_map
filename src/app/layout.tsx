@@ -43,12 +43,28 @@ export const metadata: Metadata = {
     url: "https://getaclaw.io",
     siteName: "GetaClaw",
     type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "GetaClaw — Open Source. Privacy First. 5 Minutes.",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "GetaClaw — Private AI Assistant Setup",
     description:
       "Deploy OpenClaw on your own server in 5 minutes. Privacy-focused & open source.",
+    images: ["/og-image.png"],
+  },
+  icons: {
+    icon: [
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
   },
   metadataBase: new URL("https://getaclaw.io"),
 };
@@ -61,6 +77,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="manifest" href="/site.webmanifest" />
+        <meta name="theme-color" content="#0B0B14" />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){var s=localStorage.getItem('getaclaw-theme')||'dark';var t=s;if(s==='system'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}if(t==='dark'){document.documentElement.classList.add('dark')}})()`,
