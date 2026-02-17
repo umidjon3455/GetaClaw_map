@@ -1,8 +1,8 @@
-# Get a Claw — Product Specification
+# GetaClaw — Product Specification
 
 ## Overview
 
-**Get a Claw** is an open-source, privacy-focused web application that automates the deployment of [OpenClaw](https://openclaw.ai) — a self-hosted AI gateway — onto a user's own VPS (Virtual Private Server). The entire setup takes approximately 5 minutes, requires no coding skills, and ensures that all user data (conversations, API keys, server credentials) stays entirely under the user's control.
+**GetaClaw** is an open-source, privacy-focused web application that automates the deployment of [OpenClaw](https://openclaw.ai) — a self-hosted AI gateway — onto a user's own VPS (Virtual Private Server). The entire setup takes approximately 5 minutes, requires no coding skills, and ensures that all user data (conversations, API keys, server credentials) stays entirely under the user's control.
 
 The project is accessible at [https://getaclaw.io](https://getaclaw.io).
 
@@ -12,14 +12,14 @@ Hosted AI assistant services (ChatGPT, Claude, etc.) have access to all your con
 
 ## Solution
 
-Get a Claw bridges the gap by providing a guided, browser-based setup wizard that:
+GetaClaw bridges the gap by providing a guided, browser-based setup wizard that:
 
 1. Provisions a VPS on the user's chosen cloud provider (Hetzner or DigitalOcean)
 2. Installs and configures OpenClaw automatically via cloud-init and the `@getaclaw/agent` daemon
 3. Connects messaging channels (WhatsApp, Telegram, Discord, Slack, Signal, iMessage)
 4. Provides ongoing management (updates, health checks, channel management) from the browser
 
-**No API keys or credentials are ever stored on Get a Claw's servers.** Everything is processed client-side in the browser or passed directly to the VPS via a secure WebSocket connection.
+**No API keys or credentials are ever stored on GetaClaw's servers.** Everything is processed client-side in the browser or passed directly to the VPS via a secure WebSocket connection.
 
 ## Target Users
 
@@ -32,7 +32,7 @@ Get a Claw bridges the gap by providing a guided, browser-based setup wizard tha
 
 ### 1. Landing Page
 Users land on the marketing homepage which explains:
-- What Get a Claw does (hero section)
+- What GetaClaw does (hero section)
 - How it works in 4 steps (choose server, configure AI, automated setup, access from any device)
 - Why self-hosting beats hosted services (privacy, transparency, cost)
 - Key features (multi-channel, any AI model, web UI, secure access, one-click updates, multiple instances)
@@ -58,7 +58,7 @@ After setup, users can manage their OpenClaw instances from a dashboard page (`/
 - **Privacy first**: No user data leaves the browser. VPS API keys are proxied through a thin, stateless API layer that stores nothing.
 - **Beginner friendly**: Contextual explanations adapt to skill level. Every external service link opens in a new tab with clear instructions.
 - **Transparent**: 100% open source (MIT license). Users can inspect every line of code and fork freely.
-- **Affordable**: Get a Claw itself is free. Users pay only for VPS hosting (~$4/mo) and AI model usage (pay-per-use via OpenRouter).
+- **Affordable**: GetaClaw itself is free. Users pay only for VPS hosting (~$4/mo) and AI model usage (pay-per-use via OpenRouter).
 - **Non-destructive**: Users retain full SSH access to their server as a fallback.
 
 ## Supported Integrations

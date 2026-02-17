@@ -15,7 +15,7 @@ const program = new Command();
 
 program
   .name('getaclaw-agent')
-  .description('Get a Claw Agent — manages OpenClaw setup and ongoing maintenance')
+  .description('GetaClaw Agent — manages OpenClaw setup and ongoing maintenance')
   .version('0.1.0');
 
 // --- init ---
@@ -157,7 +157,7 @@ serviceCmd
   .description('Install the systemd service')
   .action(async () => {
     const serviceContent = `[Unit]
-Description=Get a Claw Agent
+Description=GetaClaw Agent
 After=network-online.target
 Wants=network-online.target
 

@@ -1,8 +1,8 @@
-# Get a Claw — Technical Specification
+# GetaClaw — Technical Specification
 
 ## Architecture Overview
 
-Get a Claw is composed of two main packages:
+GetaClaw is composed of two main packages:
 
 1. **Web Application** (`/`) — A Next.js 16 app that serves the landing page, setup wizard, and dashboard. Runs in the browser. All sensitive operations (VPS creation, agent communication) happen client-side.
 

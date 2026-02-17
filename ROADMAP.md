@@ -1,4 +1,4 @@
-# Get a Claw — Roadmap
+# GetaClaw — Roadmap
 
 ## What's Done
 

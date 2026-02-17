@@ -25,7 +25,7 @@ export function Hero() {
             <span className="text-text-secondary">5 minutes.</span>
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-text-secondary">
-            Stop trusting third parties with your AI conversations. Get a Claw
+            Stop trusting third parties with your AI conversations. GetaClaw
             sets up OpenClaw on your own VPS — fully automated, completely
             private, and open source.
           </p>

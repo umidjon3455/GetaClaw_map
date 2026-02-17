@@ -30,7 +30,7 @@ export function StepWelcome() {
   return (
     <div>
       <h1 className="font-heading text-2xl font-bold text-text-primary sm:text-3xl">
-        Welcome to Get a Claw
+        Welcome to GetaClaw
       </h1>
       <p className="mt-3 text-text-secondary">
         We&apos;ll set up your private OpenClaw AI assistant on your own server.

@@ -1,8 +1,8 @@
-# Get a Claw — Design Specification
+# GetaClaw — Design Specification
 
 ## Design System: "Coral Claw"
 
-Get a Claw uses a custom design system called **Coral Claw** — a warm, approachable visual language that conveys trust, simplicity, and technical competence without feeling intimidating to non-technical users.
+GetaClaw uses a custom design system called **Coral Claw** — a warm, approachable visual language that conveys trust, simplicity, and technical competence without feeling intimidating to non-technical users.
 
 ## Color Palette
 

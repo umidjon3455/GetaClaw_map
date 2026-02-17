@@ -36,7 +36,7 @@ const features = [
     icon: RefreshCw,
     title: "One-click updates",
     description:
-      "Come back to Get a Claw to update your OpenClaw instance with a single click. No SSH needed.",
+      "Come back to GetaClaw to update your OpenClaw instance with a single click. No SSH needed.",
   },
   {
     icon: Layers,
