@@ -199,7 +199,7 @@ function StepRow({ step, index }: { step: DeployStep; index: number }) {
         )}
       </div>
 
-      {/* Content — min-h reserves space for progress bar so it doesn't cause layout shift */}
+      {/* Content -min-h reserves space for progress bar so it doesn't cause layout shift */}
       <div className="min-w-0 flex-1 min-h-[3rem]">
         <div className="flex items-center gap-2">
           <span
@@ -226,7 +226,7 @@ function StepRow({ step, index }: { step: DeployStep; index: number }) {
           {step.description}
         </p>
 
-        {/* Progress bar — only visible while running */}
+        {/* Progress bar -only visible while running */}
         {step.status === "running" && (
           <motion.div
             className="mt-2 h-1 w-full overflow-hidden rounded-full bg-white/[0.06]"

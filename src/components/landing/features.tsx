@@ -12,7 +12,7 @@ const features = [
     icon: MessageCircle,
     title: "All your messaging apps",
     description:
-      "WhatsApp, Telegram, Discord, Slack, Signal, iMessage — connect them all to one AI assistant.",
+      "WhatsApp, Telegram, Discord, Slack, Signal, iMessage -connect them all to one AI assistant.",
   },
   {
     icon: Bot,
@@ -42,7 +42,7 @@ const features = [
     icon: Layers,
     title: "Multiple instances",
     description:
-      "Run separate instances for personal, work, or family use — each on their own server.",
+      "Run separate instances for personal, work, or family use -each on their own server.",
   },
 ];
 

@@ -141,7 +141,7 @@ export function ActionCard({ step }: ActionCardProps) {
             {step.description}
           </p>
 
-          {/* Progress bar — explicit progress, simulated progress, or success fill */}
+          {/* Progress bar -explicit progress, simulated progress, or success fill */}
           {(step.status === "running" || step.status === "success") &&
             progressWidth !== undefined && (
               <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-sand dark:bg-dark-elevated">

@@ -15,7 +15,7 @@ export function Hero() {
           <div className="inline-flex items-center gap-2 rounded-full border border-coral/20 bg-coral-50 px-3.5 py-1.5 dark:border-coral/30 dark:bg-coral-900/20">
             <span className="h-1.5 w-1.5 rounded-full bg-coral animate-pulse" />
             <span className="text-xs font-semibold tracking-wide text-coral">
-              Open Source &middot; Privacy First
+              Free &amp; Open Source &middot; Privacy First
             </span>
           </div>
 
@@ -26,7 +26,7 @@ export function Hero() {
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-text-secondary">
             Stop trusting third parties with your AI conversations. GetaClaw
-            sets up OpenClaw on your own VPS — fully automated, completely
+            sets up OpenClaw on your own VPS - fully automated, completely
             private, and open source.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">

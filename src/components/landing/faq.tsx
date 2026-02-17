@@ -22,7 +22,7 @@ const faqs = [
   {
     question: "Is my data really private?",
     answer:
-      "Yes. Your OpenClaw instance runs entirely on your own VPS. GetaClaw never stores your API keys, server credentials, or any personal data on our servers. The website is open source — you can verify this yourself. Even the thin API proxy we use for VPS creation is stateless and stores nothing.",
+      "Yes. Your OpenClaw instance runs entirely on your own VPS. GetaClaw never stores your API keys, server credentials, or any personal data on our servers. The website is open source -you can verify this yourself. Even the thin API proxy we use for VPS creation is stateless and stores nothing.",
   },
   {
     question: "What VPS providers are supported?",
@@ -32,7 +32,7 @@ const faqs = [
   {
     question: "Can I manage my instance after setup?",
     answer:
-      "Absolutely. Come back to GetaClaw anytime to check your instance's health, update OpenClaw to the latest version, add or remove messaging channels, and change configuration — all from your browser.",
+      "Absolutely. Come back to GetaClaw anytime to check your instance's health, update OpenClaw to the latest version, add or remove messaging channels, and change configuration -all from your browser.",
   },
   {
     question: "What if something goes wrong during setup?",
@@ -42,7 +42,7 @@ const faqs = [
   {
     question: "Can I run multiple AI instances?",
     answer:
-      "Yes. You can set up multiple OpenClaw instances on different servers — for example, one for personal use and one for work. Each instance is fully independent.",
+      "Yes. You can set up multiple OpenClaw instances on different servers -for example, one for personal use and one for work. Each instance is fully independent.",
   },
 ];
 
@@ -66,9 +66,9 @@ export function FAQ() {
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
                 className="flex w-full items-center justify-between py-5 text-left"
               >
-                <span className="text-base font-semibold text-text-primary pr-4">
+                <h3 className="text-base font-semibold text-text-primary pr-4">
                   {faq.question}
-                </span>
+                </h3>
                 <ChevronDown
                   className={`h-5 w-5 shrink-0 text-text-muted transition-transform duration-200 ${
                     openIndex === i ? "rotate-180" : ""

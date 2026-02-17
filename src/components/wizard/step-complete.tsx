@@ -10,7 +10,7 @@ export function StepComplete() {
   const [showToken, setShowToken] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
 
-  const serverIp = deployResult?.serverIp ?? "—";
+  const serverIp = deployResult?.serverIp ?? "-";
   const gatewayToken = deployResult?.gatewayToken ?? "";
   const controlUiUrl =
     deployResult?.controlUiUrl ??

@@ -45,7 +45,7 @@ export async function createHetznerServer(
       const error = await res.json().catch(() => ({}));
       const message: string = error.error?.message || "";
 
-      // Name conflict — try next candidate
+      // Name conflict -try next candidate
       if (message.toLowerCase().includes("name is already used")) {
         continue;
       }
@@ -86,7 +86,7 @@ async function ensureFirewall(
       return existing.id;
     }
 
-    // No existing firewall — create one
+    // No existing firewall -create one
     return await createFirewall(apiKey, agentPort);
   } catch {
     // Non-fatal: server still works without cloud firewall (UFW handles it)

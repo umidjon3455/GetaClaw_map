@@ -108,7 +108,7 @@ export function StepSecurity() {
             </p>
             <ol className="mt-2 list-inside list-decimal space-y-1.5 text-sm text-text-secondary">
               <li>
-                A Tailscale account —{" "}
+                A Tailscale account -{" "}
                 <a
                   href="https://login.tailscale.com/start"
                   target="_blank"
@@ -119,7 +119,7 @@ export function StepSecurity() {
                 </a>
               </li>
               <li>
-                Tailscale installed on your phone/device —{" "}
+                Tailscale installed on your phone/device -{" "}
                 <a
                   href="https://tailscale.com/download"
                   target="_blank"
@@ -130,7 +130,7 @@ export function StepSecurity() {
                 </a>
               </li>
               <li>
-                An auth key —{" "}
+                An auth key -{" "}
                 <a
                   href="https://login.tailscale.com/admin/settings/keys"
                   target="_blank"

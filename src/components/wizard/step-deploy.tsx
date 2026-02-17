@@ -39,7 +39,7 @@ const DEPLOY_STEPS: ActionStep[] = [
     id: "install-system",
     title: "Preparing system",
     description:
-      "Installing system dependencies and Node.js — this step can take a couple of minutes",
+      "Installing system dependencies and Node.js -this step can take a couple of minutes",
     status: "pending",
     estimatedDuration: 120,
   },
@@ -340,7 +340,7 @@ export function StepDeploy() {
           ? "Reconnecting to your server to pick up where we left off..."
           : "The page was refreshed while a deployment was in progress. The server may still be setting up on your VPS provider.";
       case "resuming":
-        return "Reconnecting to your server — the setup continued while you were away.";
+        return "Reconnecting to your server -the setup continued while you were away.";
       default:
         return "Sit back and watch. This usually takes 5-7 minutes.";
     }
@@ -368,7 +368,7 @@ export function StepDeploy() {
 
       {phase === "interrupted" && !canResume && (
         <div className="mt-4 rounded-md border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-400">
-          Check your VPS provider dashboard — if a server was created, you may
+          Check your VPS provider dashboard -if a server was created, you may
           want to delete it before retrying.
         </div>
       )}

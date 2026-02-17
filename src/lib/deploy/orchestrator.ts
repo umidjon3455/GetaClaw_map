@@ -187,7 +187,7 @@ export async function resumeDeployment(
   let serverIp = resume.serverIp;
 
   if (!serverIp) {
-    // Server was created but we don't have the IP yet — poll for boot
+    // Server was created but we don't have the IP yet -poll for boot
     updateStep("wait-boot", { status: "running" });
     try {
       serverIp = await pollForBoot(
@@ -208,7 +208,7 @@ export async function resumeDeployment(
       throw err;
     }
   } else {
-    // Already have IP — mark boot as done
+    // Already have IP -mark boot as done
     updateStep("wait-boot", { status: "success" });
   }
 
@@ -344,7 +344,7 @@ async function pollForAgent(
   }
 
   throw new Error(
-    "Agent did not come online within 5 minutes. Cloud-init may have failed — try SSH into the server to check /var/log/cloud-init-output.log."
+    "Agent did not come online within 5 minutes. Cloud-init may have failed -try SSH into the server to check /var/log/cloud-init-output.log."
   );
 }
 

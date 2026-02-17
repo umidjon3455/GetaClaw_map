@@ -6,14 +6,14 @@ const steps = [
     number: "01",
     title: "Choose your server",
     description:
-      "Pick a VPS provider — Hetzner, DigitalOcean, or more. Paste your API key and select a region.",
+      "Pick a VPS provider -Hetzner, DigitalOcean, or more. Paste your API key and select a region.",
   },
   {
     icon: Settings,
     number: "02",
     title: "Configure your AI",
     description:
-      "Choose your AI models via OpenRouter and pick which messaging apps you want — WhatsApp, Telegram, Discord, and more.",
+      "Choose your AI models via OpenRouter and pick which messaging apps you want -WhatsApp, Telegram, Discord, and more.",
   },
   {
     icon: Zap,
@@ -27,7 +27,7 @@ const steps = [
     number: "04",
     title: "Access from any device",
     description:
-      "Your private AI is live. Open it from your phone, laptop, or any device — securely, via Tailscale or password.",
+      "Your private AI is live. Open it from your phone, laptop, or any device -securely, via Tailscale or password.",
   },
 ];
 

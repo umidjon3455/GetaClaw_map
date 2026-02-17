@@ -22,10 +22,13 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+const siteTitle = "GetaClaw - Set Up Your Private AI Assistant in 5 Minutes";
+const siteDescription =
+  "Free, open-source tool to deploy OpenClaw on your own VPS. No coding required. Your AI, your server, your data.";
+
 export const metadata: Metadata = {
-  title: "GetaClaw — Set Up Your Private AI Assistant in 5 Minutes",
-  description:
-    "Open-source, privacy-focused tool to deploy OpenClaw on your own VPS. No coding required. Your AI, your server, your data.",
+  title: siteTitle,
+  description: siteDescription,
   keywords: [
     "OpenClaw",
     "self-hosted AI",
@@ -34,12 +37,14 @@ export const metadata: Metadata = {
     "AI chatbot",
     "open source",
     "privacy",
+    "self-hosted chatbot",
+    "private ChatGPT alternative",
+    "deploy AI on VPS",
   ],
   authors: [{ name: "GetaClaw" }],
   openGraph: {
-    title: "GetaClaw — Set Up Your Private AI Assistant in 5 Minutes",
-    description:
-      "Open-source, privacy-focused tool to deploy OpenClaw on your own VPS. No coding required.",
+    title: siteTitle,
+    description: siteDescription,
     url: "https://getaclaw.io",
     siteName: "GetaClaw",
     type: "website",
@@ -48,15 +53,14 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "GetaClaw — Open Source. Privacy First. 5 Minutes.",
+        alt: "GetaClaw - Open Source. Privacy First. 5 Minutes.",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "GetaClaw — Private AI Assistant Setup",
-    description:
-      "Deploy OpenClaw on your own server in 5 minutes. Privacy-focused & open source.",
+    title: siteTitle,
+    description: siteDescription,
     images: ["/og-image.png"],
   },
   icons: {
@@ -79,6 +83,30 @@ export default function RootLayout({
       <head>
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="theme-color" content="#0B0B14" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              name: "GetaClaw",
+              description: siteDescription,
+              url: "https://getaclaw.io",
+              applicationCategory: "UtilitiesApplication",
+              operatingSystem: "Web",
+              offers: {
+                "@type": "Offer",
+                price: "0",
+                priceCurrency: "USD",
+              },
+              author: {
+                "@type": "Organization",
+                name: "GetaClaw",
+                url: "https://getaclaw.io",
+              },
+            }),
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){var s=localStorage.getItem('getaclaw-theme')||'dark';var t=s;if(s==='system'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}if(t==='dark'){document.documentElement.classList.add('dark')}})()`,

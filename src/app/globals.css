@@ -4,7 +4,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ============================================
-   GetaClaw — Coral Claw Design System
+   GetaClaw - Coral Claw Design System
    ============================================ */
 
 /* --- Static tokens: inlined for efficiency, never change between themes --- */
