@@ -42,7 +42,7 @@ export function Troubleshooting() {
           Here are solutions to the most common problems. If your issue isn&apos;t
           listed, open an issue on{" "}
           <a
-            href="https://github.com/getaclaw/getaclaw/issues"
+            href="https://github.com/hristo2612/getaclaw/issues"
             target="_blank"
             rel="noopener noreferrer"
             className="font-medium text-coral hover:underline"

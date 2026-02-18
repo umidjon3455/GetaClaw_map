@@ -8,7 +8,7 @@ import { ThemeToggle } from "./theme-toggle";
 const navLinks = [
   { href: "/#how-it-works", label: "How it Works" },
   { href: "/#faq", label: "FAQ" },
-  { href: "https://github.com/getaclaw/getaclaw", label: "GitHub", external: true },
+  { href: "https://github.com/hristo2612/getaclaw", label: "GitHub", external: true },
 ];
 
 export function Navbar() {

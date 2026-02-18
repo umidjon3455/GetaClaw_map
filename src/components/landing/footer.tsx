@@ -22,7 +22,7 @@ export function Footer() {
             OpenClaw Docs
           </a>
           <a
-            href="https://github.com/getaclaw/getaclaw"
+            href="https://github.com/hristo2612/getaclaw"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 text-xs text-text-secondary hover:text-text-primary"
