@@ -21,6 +21,7 @@ export interface SetupConfig {
   openrouterApiKey: string;
   selectedModels: string[];
   securityMode: 'password' | 'tailscale';
+  gatewayPort?: number;
   gatewayToken?: string;
   tailscaleAuthKey?: string;
   channels: ChannelConfig[];

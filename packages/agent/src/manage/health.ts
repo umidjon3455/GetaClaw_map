@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import type { AgentMessage, ClientMessage } from '../protocol.js';
 import { safeExec } from '../utils/exec.js';
 import { logger } from '../utils/logger.js';
@@ -30,6 +31,8 @@ async function handleHealthCheck(
   sendEvent: (event: AgentMessage) => void,
 ): Promise<void> {
   try {
+    const gatewayPort = getGatewayPort();
+
     // Check gateway service status
     const serviceResult = await safeExec('systemctl', ['is-active', 'openclaw-gateway']);
     const serviceStatus = serviceResult.stdout.trim();
@@ -55,7 +58,7 @@ async function handleHealthCheck(
         '-o', '/dev/null',
         '-w', '%{http_code}',
         '--max-time', '3',
-        'http://127.0.0.1:18789',
+        `http://127.0.0.1:${gatewayPort}`,
       ]);
       const httpCode = parseInt(curlResult.stdout.trim(), 10);
       gatewayReachable = httpCode >= 200 && httpCode < 500;
@@ -84,6 +87,7 @@ async function handleHealthCheck(
           service: serviceStatus,
           reachable: gatewayReachable,
           version,
+          port: gatewayPort,
         },
         system: {
           uptimeSince,
@@ -102,6 +106,30 @@ async function handleHealthCheck(
       data: { message: `Health check failed: ${errorMessage}` },
     });
   }
+}
+
+function getGatewayPort(): number {
+  const configCandidates = [
+    '/etc/getaclaw/init-config.json',
+    '/etc/getaclaw/init-config.done.json',
+  ];
+
+  for (const configPath of configCandidates) {
+    if (!fs.existsSync(configPath)) continue;
+    try {
+      const content = fs.readFileSync(configPath, 'utf-8');
+      const parsed = JSON.parse(content) as { setup?: { gatewayPort?: unknown } };
+      const value = parsed.setup?.gatewayPort;
+      const parsedPort = typeof value === 'number' ? value : Number(value);
+      if (Number.isInteger(parsedPort) && parsedPort > 0 && parsedPort <= 65535) {
+        return parsedPort;
+      }
+    } catch {
+      // Ignore malformed config and use fallback.
+    }
+  }
+
+  return 18789;
 }
 
 async function handleHealthLogs(

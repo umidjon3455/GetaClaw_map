@@ -16,6 +16,7 @@ export interface ServerConfig {
   userData: string; // cloud-init script
   apiKey: string;
   agentPort?: number; // for cloud firewall rules
+  gatewayPort?: number; // for cloud firewall rules
 }
 
 export interface ServerCreateResult {

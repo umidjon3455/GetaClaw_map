@@ -12,6 +12,8 @@ export const healthStep: SetupStep = {
   shouldRun: (_config, results) => !!results.get('openclawVersion'),
 
   async execute(ctx: StepContext): Promise<void> {
+    const gatewayPort = String(ctx.config.gatewayPort ?? 18789);
+    const localGatewayUrl = `http://127.0.0.1:${gatewayPort}`;
     ctx.emit('log', 'health', 'Running final health checks...');
     ctx.emit('step.progress', 'health', 10);
 
@@ -26,7 +28,7 @@ export const healthStep: SetupStep = {
           '-o', '/dev/null',
           '-w', '%{http_code}',
           '--max-time', '5',
-          'http://127.0.0.1:18789',
+          localGatewayUrl,
         ]);
 
         const httpCode = parseInt(result.stdout.trim(), 10);
@@ -46,7 +48,7 @@ export const healthStep: SetupStep = {
     }
 
     if (!gatewayReachable) {
-      throw new Error('OpenClaw gateway is not responding on port 18789');
+      throw new Error(`OpenClaw gateway is not responding on port ${gatewayPort}`);
     }
 
     ctx.emit('step.progress', 'health', 40);
@@ -61,7 +63,7 @@ export const healthStep: SetupStep = {
         '--max-time', '5',
         '-H', 'Upgrade: websocket',
         '-H', 'Connection: Upgrade',
-        'http://127.0.0.1:18789',
+        localGatewayUrl,
       ]);
       ctx.emit('log', 'health', `WebSocket endpoint check: HTTP ${wsResult.stdout.trim()}`);
     } catch {
@@ -79,7 +81,7 @@ export const healthStep: SetupStep = {
         '-o', '/dev/null',
         '-w', '%{http_code}',
         '--max-time', '5',
-        'http://127.0.0.1:18789',
+        localGatewayUrl,
       ]);
       const uiCode = parseInt(uiResult.stdout.trim(), 10);
       ctx.emit('log', 'health', `Control UI responding (HTTP ${uiCode})`);
@@ -92,15 +94,18 @@ export const healthStep: SetupStep = {
     // Build connection details
     const tailscaleIp = ctx.results.get('tailscaleIp') as string | undefined;
     const controlUiUrl = tailscaleIp
-      ? `http://${tailscaleIp}:18789`
-      : 'http://127.0.0.1:18789';
+      ? `http://${tailscaleIp}:${gatewayPort}`
+      : undefined;
 
-    ctx.results.set('controlUiUrl', controlUiUrl);
+    ctx.results.set('gatewayPort', Number(gatewayPort));
+    if (controlUiUrl) {
+      ctx.results.set('controlUiUrl', controlUiUrl);
+    }
     ctx.results.set('healthCheckPassed', true);
 
     ctx.emit('step.progress', 'health', 100);
-    ctx.emit('log', 'health', `Health checks passed. Control UI: ${controlUiUrl}`);
-    logger.info('All health checks passed', { controlUiUrl });
+    ctx.emit('log', 'health', `Health checks passed on gateway port ${gatewayPort}`);
+    logger.info('All health checks passed', { gatewayPort, controlUiUrl });
   },
 };
 

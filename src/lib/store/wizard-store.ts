@@ -46,6 +46,7 @@ const STEP_ORDER: WizardStep[] = [
 
 export interface DeployIntermediate {
   agentPort: number;
+  gatewayPort?: number;
   pairingToken: string;
   gatewayToken: string;
   serverId?: string;

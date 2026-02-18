@@ -10,6 +10,7 @@ export const serviceStep: SetupStep = {
   shouldRun: (_config, results) => !!results.get('openclawVersion'),
 
   async execute(ctx: StepContext): Promise<void> {
+    const gatewayPort = String(ctx.config.gatewayPort ?? 18789);
     ctx.emit('log', 'service', 'Installing OpenClaw gateway service...');
     ctx.emit('step.progress', 'service', 10);
 
@@ -29,7 +30,7 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-ExecStart=${openclawBin} gateway --port 18789
+ExecStart=${openclawBin} gateway --port ${gatewayPort}
 Restart=always
 RestartSec=5
 Environment=NODE_ENV=production

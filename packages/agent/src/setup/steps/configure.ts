@@ -20,6 +20,7 @@ export const configureStep: SetupStep = {
   shouldRun: (_config, results) => !!results.get('openclawVersion'),
 
   async execute(ctx: StepContext): Promise<void> {
+    const gatewayPort = String(ctx.config.gatewayPort ?? 18789);
     const openclawDir = path.join(os.homedir(), '.openclaw');
     const envPath = path.join(openclawDir, '.env');
 
@@ -32,7 +33,7 @@ export const configureStep: SetupStep = {
     // Both password and tailscale modes bind to lan — password auth or tailnet is the security layer
     const bindMode = 'lan';
     await configSet('gateway.mode', 'local');
-    await configSet('gateway.port', '18789');
+    await configSet('gateway.port', gatewayPort);
     await configSet('gateway.bind', bindMode);
     // Trust Caddy reverse proxy on localhost so connections are treated as local
     await configSet('gateway.trustedProxies', '["127.0.0.1"]');

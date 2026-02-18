@@ -11,11 +11,12 @@ export function StepComplete() {
   const [copied, setCopied] = useState<string | null>(null);
 
   const serverIp = deployResult?.serverIp ?? "-";
+  const gatewayPort = deployResult?.gatewayPort ?? null;
   const gatewayToken = deployResult?.gatewayToken ?? "";
   const controlUiUrl =
     deployResult?.controlUiUrl ??
     (securityMode === "tailscale"
-      ? `https://${serverName}.tail1234.ts.net/`
+      ? `http://${serverName}.tail1234.ts.net:${gatewayPort ?? 18789}`
       : `https://${serverIp}/#token=${gatewayToken}`);
   const tailscaleHostname =
     deployResult?.tailscaleIp ?? `${serverName}.tail1234.ts.net`;
@@ -79,6 +80,22 @@ export function StepComplete() {
               {copied === "ip" ? "Copied" : "Copy"}
             </button>
           </div>
+
+          {gatewayPort && (
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-text-muted">OpenClaw gateway port</p>
+                <p className="font-mono text-sm text-text-primary">{gatewayPort}</p>
+              </div>
+              <button
+                onClick={() => copyToClipboard(String(gatewayPort), "gateway-port")}
+                className="flex items-center gap-1 rounded-[var(--radius-sm)] px-2 py-1 text-xs text-text-muted hover:bg-sand/40 hover:text-text-secondary dark:hover:bg-dark-elevated"
+              >
+                {copied === "gateway-port" ? <Check className="h-3 w-3 text-sea-green" /> : <Copy className="h-3 w-3" />}
+                {copied === "gateway-port" ? "Copied" : "Copy"}
+              </button>
+            </div>
+          )}
 
           {securityMode === "tailscale" && (
             <div className="flex items-center justify-between">

@@ -9,8 +9,8 @@ export async function createHetznerServer(
   config: ServerConfig
 ): Promise<ServerCreateResult> {
   // Ensure a cloud firewall exists with the required ports
-  const firewallId = config.agentPort
-    ? await ensureFirewall(config.apiKey, config.agentPort)
+  const firewallId = config.agentPort && config.gatewayPort
+    ? await ensureFirewall(config.apiKey, config.agentPort, config.gatewayPort)
     : undefined;
 
   // Try up to 5 names: original, then -2, -3, -4, -5
@@ -71,23 +71,24 @@ export async function createHetznerServer(
 
 /**
  * Find the existing getaclaw-firewall or create one.
- * Ensures ports 22, agentPort, and 18789 (gateway) are all open.
+ * Ensures ports 22, agentPort, 443, and gatewayPort are all open.
  */
 async function ensureFirewall(
   apiKey: string,
-  agentPort: number
+  agentPort: number,
+  gatewayPort: number
 ): Promise<number | undefined> {
   try {
     // Look for our existing firewall by label
     const existing = await findFirewall(apiKey);
     if (existing) {
       // Make sure it has the right rules for this agent port
-      await updateFirewallRules(apiKey, existing.id, agentPort);
+      await updateFirewallRules(apiKey, existing.id, agentPort, gatewayPort);
       return existing.id;
     }
 
     // No existing firewall -create one
-    return await createFirewall(apiKey, agentPort);
+    return await createFirewall(apiKey, agentPort, gatewayPort);
   } catch {
     // Non-fatal: server still works without cloud firewall (UFW handles it)
     console.warn("Failed to ensure Hetzner firewall, continuing without it");
@@ -118,8 +119,8 @@ interface FirewallRule {
   source_ips: string[];
 }
 
-function buildRules(agentPort: number): FirewallRule[] {
-  return [22, agentPort, 443, 18789].map((port) => ({
+function buildRules(agentPort: number, gatewayPort: number): FirewallRule[] {
+  return [22, agentPort, 443, gatewayPort].map((port) => ({
     direction: "in",
     protocol: "tcp",
     port: String(port),
@@ -130,9 +131,10 @@ function buildRules(agentPort: number): FirewallRule[] {
 async function updateFirewallRules(
   apiKey: string,
   firewallId: number,
-  agentPort: number
+  agentPort: number,
+  gatewayPort: number
 ): Promise<void> {
-  const rules = buildRules(agentPort);
+  const rules = buildRules(agentPort, gatewayPort);
 
   await fetch(`${API_BASE}/firewalls/${firewallId}/actions/set_rules`, {
     method: "POST",
@@ -146,9 +148,10 @@ async function updateFirewallRules(
 
 async function createFirewall(
   apiKey: string,
-  agentPort: number
+  agentPort: number,
+  gatewayPort: number
 ): Promise<number | undefined> {
-  const rules = buildRules(agentPort);
+  const rules = buildRules(agentPort, gatewayPort);
 
   const res = await fetch(`${API_BASE}/firewalls`, {
     method: "POST",

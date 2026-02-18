@@ -10,6 +10,7 @@ export interface Instance {
   serverIp: string;
   serverRegion: string;
   agentPort: number;
+  gatewayPort?: number;
   agentToken: string;
   gatewayToken: string;
   securityMode: SecurityMode;

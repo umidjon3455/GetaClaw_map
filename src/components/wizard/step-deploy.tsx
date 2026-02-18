@@ -134,10 +134,19 @@ export function StepDeploy() {
     (data: DeployProgress) => {
       const current = useWizardStore.getState().deployIntermediate;
       if (!current) {
+        if (
+          data.agentPort == null ||
+          data.gatewayPort == null ||
+          data.pairingToken == null ||
+          data.gatewayToken == null
+        ) {
+          return;
+        }
         useWizardStore.getState().setDeployIntermediate({
-          agentPort: data.agentPort!,
-          pairingToken: data.pairingToken!,
-          gatewayToken: data.gatewayToken!,
+          agentPort: data.agentPort,
+          gatewayPort: data.gatewayPort,
+          pairingToken: data.pairingToken,
+          gatewayToken: data.gatewayToken,
           serverId: data.serverId,
           serverIp: data.serverIp,
         });
@@ -167,6 +176,7 @@ export function StepDeploy() {
         serverIp: result.serverIp,
         serverRegion: wizard.serverRegion,
         agentPort: result.agentPort,
+        gatewayPort: result.gatewayPort,
         agentToken: result.pairingToken,
         gatewayToken: result.gatewayToken ?? "",
         securityMode: wizard.securityMode!,
@@ -251,6 +261,7 @@ export function StepDeploy() {
       serverId: intermediate.serverId,
       serverIp: intermediate.serverIp,
       agentPort: intermediate.agentPort,
+      gatewayPort: intermediate.gatewayPort ?? 18789,
       pairingToken: intermediate.pairingToken,
       gatewayToken: intermediate.gatewayToken,
     };

@@ -3,6 +3,7 @@ import type { SecurityMode, Channel, ChannelConfig } from "@/lib/store/wizard-st
 export interface CloudInitConfig {
   pairingToken: string;
   agentPort: number;
+  gatewayPort: number;
   openrouterApiKey: string;
   selectedModels: string[];
   securityMode: SecurityMode;
@@ -14,7 +15,15 @@ export interface CloudInitConfig {
 }
 
 export function generateAgentPort(): number {
-  return Math.floor(Math.random() * 30000) + 30000; // 30000-60000
+  const array = new Uint32Array(1);
+  crypto.getRandomValues(array);
+  return (array[0] % 30001) + 30000; // 30000-60000
+}
+
+export function generateGatewayPort(): number {
+  const array = new Uint32Array(1);
+  crypto.getRandomValues(array);
+  return (array[0] % 14000) + 42000; // 42000-55999
 }
 
 export function generatePairingToken(): string {
@@ -40,11 +49,13 @@ export function generateCloudInit(config: CloudInitConfig): string {
     {
       pairingToken: config.pairingToken,
       agentPort: config.agentPort,
+      gatewayPort: config.gatewayPort,
       serverName: config.serverName,
       setup: {
         openrouterApiKey: config.openrouterApiKey,
         selectedModels: config.selectedModels,
         securityMode: config.securityMode,
+        gatewayPort: config.gatewayPort,
         gatewayToken: config.gatewayToken || "",
         tailscaleAuthKey:
           config.securityMode === "tailscale"
@@ -80,7 +91,7 @@ runcmd:
   - ufw allow 22/tcp
   - ufw allow ${config.agentPort}/tcp
   - ufw allow 443/tcp
-  - ufw allow 18789/tcp
+  - ufw allow ${config.gatewayPort}/tcp
   - ufw --force enable
 
   # Install Node.js 22
@@ -111,7 +122,7 @@ runcmd:
     cat > /etc/caddy/Caddyfile << 'CADDYEOF'
     :443 {
       tls /etc/caddy/certs/cert.pem /etc/caddy/certs/key.pem
-      reverse_proxy localhost:18789
+      reverse_proxy localhost:${config.gatewayPort}
     }
     CADDYEOF
 

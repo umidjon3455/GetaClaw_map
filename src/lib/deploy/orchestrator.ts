@@ -4,6 +4,7 @@ import {
   generateCloudInit,
   generatePairingToken,
   generateAgentPort,
+  generateGatewayPort,
   type CloudInitConfig,
 } from "@/lib/cloud-init/generator";
 import { createHetznerServer, getHetznerServer } from "@/lib/vps/hetzner";
@@ -30,6 +31,7 @@ export interface DeployResult {
   serverId: string;
   serverIp: string;
   agentPort: number;
+  gatewayPort: number;
   pairingToken: string;
   gatewayToken?: string;
   controlUiUrl?: string;
@@ -39,6 +41,7 @@ export interface DeployResult {
 
 export interface DeployProgress {
   agentPort?: number;
+  gatewayPort?: number;
   pairingToken?: string;
   gatewayToken?: string;
   serverId?: string;
@@ -80,9 +83,13 @@ export async function runDeployment(
   const pairingToken = generatePairingToken();
   const gatewayToken = generatePairingToken();
   const agentPort = generateAgentPort();
+  let gatewayPort = generateGatewayPort();
+  while (gatewayPort === agentPort) {
+    gatewayPort = generateGatewayPort();
+  }
 
   // Report initial tokens so they're persisted before anything can fail
-  onProgress?.({ agentPort, pairingToken, gatewayToken });
+  onProgress?.({ agentPort, gatewayPort, pairingToken, gatewayToken });
 
   // --- Step 1: Create server ---
   updateStep("create-server", { status: "running" });
@@ -90,6 +97,7 @@ export async function runDeployment(
   const cloudInitConfig: CloudInitConfig = {
     pairingToken,
     agentPort,
+    gatewayPort,
     openrouterApiKey: config.openrouterApiKey,
     selectedModels: config.selectedModels,
     securityMode: config.securityMode,
@@ -112,6 +120,7 @@ export async function runDeployment(
       userData,
       apiKey: config.vpsApiKey,
       agentPort,
+      gatewayPort,
     };
 
     const result =
@@ -157,6 +166,7 @@ export async function runDeployment(
   return await connectAndSetup({
     serverIp,
     agentPort,
+    gatewayPort,
     serverId,
     pairingToken,
     gatewayToken,
@@ -172,6 +182,7 @@ export interface ResumeConfig {
   serverId: string;
   serverIp?: string;
   agentPort: number;
+  gatewayPort: number;
   pairingToken: string;
   gatewayToken: string;
 }
@@ -215,6 +226,7 @@ export async function resumeDeployment(
   return await connectAndSetup({
     serverIp,
     agentPort: resume.agentPort,
+    gatewayPort: resume.gatewayPort,
     serverId: resume.serverId,
     pairingToken: resume.pairingToken,
     gatewayToken: resume.gatewayToken,
@@ -227,6 +239,7 @@ export async function resumeDeployment(
 interface ConnectAndSetupArgs {
   serverIp: string;
   agentPort: number;
+  gatewayPort: number;
   serverId: string;
   pairingToken: string;
   gatewayToken: string;
@@ -238,6 +251,7 @@ async function connectAndSetup(args: ConnectAndSetupArgs): Promise<DeployResult>
   const {
     serverIp,
     agentPort,
+    gatewayPort,
     serverId,
     pairingToken,
     gatewayToken,
@@ -271,12 +285,17 @@ async function connectAndSetup(args: ConnectAndSetupArgs): Promise<DeployResult>
       securityMode
     );
 
-    const controlUiUrl = `https://${serverIp}/#token=${gatewayToken}`;
+    const controlUiUrl =
+      (setupResults?.controlUiUrl as string | undefined) ??
+      `https://${serverIp}/#token=${gatewayToken}`;
+    const resolvedGatewayPort =
+      (setupResults?.gatewayPort as number | undefined) ?? gatewayPort;
 
     return {
       serverId,
       serverIp,
       agentPort,
+      gatewayPort: resolvedGatewayPort,
       pairingToken,
       gatewayToken,
       controlUiUrl,
