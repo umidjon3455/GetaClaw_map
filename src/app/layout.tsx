@@ -27,6 +27,7 @@ const siteDescription =
   "Free, open-source tool to deploy OpenClaw on your own VPS. No coding required. Your AI, your server, your data.";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://getaclaw.io"),
   title: siteTitle,
   description: siteDescription,
   keywords: [
@@ -50,7 +51,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/og-image.png",
+        url: "https://getaclaw.io/og-image.png",
         width: 1200,
         height: 630,
         alt: "GetaClaw - Open Source. Privacy First. 5 Minutes.",
@@ -61,7 +62,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteTitle,
     description: siteDescription,
-    images: ["/og-image.png"],
+    images: ["https://getaclaw.io/og-image.png"],
   },
   icons: {
     icon: [
@@ -70,7 +71,6 @@ export const metadata: Metadata = {
     ],
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
   },
-  metadataBase: new URL("https://getaclaw.io"),
 };
 
 export default function RootLayout({
