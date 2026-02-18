@@ -1,6 +1,6 @@
 {
   "name": "@getaclaw/agent",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "Lightweight daemon for orchestrating OpenClaw setup and management on a VPS",
   "type": "module",
   "bin": {
