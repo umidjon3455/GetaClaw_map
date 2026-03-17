@@ -1,5 +1,5 @@
 # GetaClaw
-
+.
 **Deploy your own OpenClaw AI assistant in 5 minutes.** No terminal, no SSH, no config files.
 
 GetaClaw is an open-source web wizard that sets up [OpenClaw](https://openclaw.ai) — a self-hosted AI gateway — on your own VPS. All your conversations, API keys, and server credentials stay entirely under your control. Nothing is stored on our servers.
